@@ -1006,7 +1006,7 @@ return [
     'application_bypass'=>'application bypass',
     'current_program'=>'current program',
     'new_program'=>'new program',
-    'inst_tapplication_form'=>'HIMS Application Form',
+    'inst_tapplication_form'=>':degree HIMS Application Form',
     'degree_certificates'=>'degree certificates',
     'configure_degree_certificates'=>'configure degree certificates',
     'admission_letter'=>'admission letter',
