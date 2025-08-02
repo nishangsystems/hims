@@ -16,10 +16,10 @@
                 </div>
                 <div class="py-4 my-3 text-center shadow">
                     <h4 class="text-uppercase text-dark">undergraduate admission form</h4><br><span class="text-primary">IN</span>
-                    <label class="d-block py-2">Programme: ________________________________________________</label>
+                    <label class="d-block py-2">Programme: <b>{{ $program->name }}</b></label>
                     <label class="d-block py-2">Level: ________________________________________________</label>
                 </div>
-                    <label class="d-block py-4 text-center">Academic Year<br> ________________________________________________</label>
+                    <label class="d-block py-4 text-center">Academic Year<br> <b style="text-decoration: underline; padding-inline: 2rem;">{{ $application->year->name }}</b></label>
             </div>
             <div class="mx-auto py-2 justify-content-between text-primary" style=" font-style: italic; width: 80%; margin-inline: auto; display: flex; justify-content: between">
                 <span style="width: 30%; display: inline-block;" class="shadow px-3 py-3 text-center">
