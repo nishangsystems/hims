@@ -1144,6 +1144,8 @@ class ProgramController extends Controller
                     if($prefix == null){
                         return back()->with('error', 'Matricule generation prefix not set.');
                     }
+
+                    dd($this->api_service->max_matric($prefix, $year)); //matrics starting with '$prefix' sort
                     $max_matric = json_decode($this->api_service->max_matric($prefix, $year))->data; //matrics starting with '$prefix' sort
                     // dd($max_matric);
                     if($max_matric == null){
