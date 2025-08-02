@@ -86,7 +86,6 @@ class ApiService{
     public function max_matric($prefix, $year, $suffix=null)
     {
         # code...
-        dd(Http::get(Helpers::instance()->getApiRoot().'/'.config('api_routes.max_matric').'/'.$prefix.'/'.$year.'/'.$suffix)->collect());
         return Http::get(Helpers::instance()->getApiRoot().'/'.config('api_routes.max_matric').'/'.$prefix.'/'.$year.'/'.$suffix)->body();
     }
 
