@@ -365,7 +365,7 @@ class HomeController extends Controller
             }else{
                 $request_data = ['mobileWalletNumber'=>str_replace('+', '', strlen($request->momo_number) == 9 ? '237'.$request->momo_number : $request->momo_number), 'mchTransactionRef'=>'_apl_fee_'.time().'_'.random_int(1, 9999), "amount"=> $request->amount, "currencyCode"=> "XAF", "description"=>"Payment for application fee into HIMS"];
                 $_response = Http::withHeaders($headers)->post(config('tranzak.base').config('tranzak.direct_payment_request'), $request_data);
-                dd($_response->collect());
+                // dd($_response->collect());
                 if($_response->status() == 200){
                     
                     // $_data = $_response->collect();
