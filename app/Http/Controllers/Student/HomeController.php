@@ -326,6 +326,7 @@ class HomeController extends Controller
             $data = collect($data)->filter(function($value, $key){return $key != '_token';})->toArray();
             $application = ApplicationForm::updateOrInsert(['id'=> $application_id, 'student_id'=>auth('student')->id()], $data);
         }elseif($step == 7){
+            dd($request->all());
             $tk_counter = 0;
             $application = auth('student')->user()->applicationForms()->where('year_id', Helpers::instance()->getCurrentAccademicYear())->first();
             if($application->degree_id == null){ goto SKIP;}
@@ -385,10 +386,10 @@ class HomeController extends Controller
                     \App\Models\PendingTranzakTransaction::create($data);
                     return redirect()->to(route('student.application.payment.processing', $application_id));
                 }
-            }
-            // dd($_response->collect());
-            if(count($_response->collect()['data']) == 0 and $tk_counter == 0){
-                goto REQUEST_TOKEN;
+                // dd($_response->collect());
+                if(count($_response->collect()['data']) == 0 and $tk_counter == 0){
+                    goto REQUEST_TOKEN;
+                }
             }
 
         }else{
