@@ -213,9 +213,10 @@ class HomeController extends Controller
                 $application->save();
             }
             // $application->update(['campus_id'=>1]);
-            if($application->degree_id != null and ($application->tranzak_transaction == null || $application->tranzak_transaction->payment_id != $application->degree_id) and $step != 0 ){
-                $data['step'] = 6;
-            }elseif($application->degree_id != null and ($application->tranzak_transaction != null and $application->tranzak_transaction->payment_id == $application->degree_id) and $step == 6){
+            // if($application->degree_id != null and ($application->tranzak_transaction == null || $application->tranzak_transaction->payment_id != $application->degree_id) and $step != 0 ){
+            //     $data['step'] = 6;
+            // }else
+            if($application->degree_id != null and ($application->tranzak_transaction != null and $application->tranzak_transaction->payment_id == $application->degree_id) and $step == 6){
                 return redirect()->route('student.home')->with('error', "Payment has been made for this application instance");
             }
             $data['certificates'] = collect(json_decode($this->api_service->certificates())->data);
@@ -225,9 +226,12 @@ class HomeController extends Controller
                 // dd($this->api_service->campusDegreeCertificatePrograms($application->campus_id, $application->degree_id, $application->entry_qualification));
                 $data['programs'] = collect(json_decode($this->api_service->campusDegreeCertificatePrograms($application->campus_id, $application->degree_id, $application->entry_qualification))->data??[]);
             }
-            $data['aux_programs'] = \App\Models\Program::where('type', 'auxiliary')->get();
+            // $data['aux_programs'] = \App\Models\Program::where('type', 'auxiliary')->get();
             $data['degrees'] = collect(json_decode($this->api_service->degrees())->data);
             $data['degree'] = $application->degree_id == null ? null : $data['degrees']->where('id', $application->degree_id)->first();
+            if($data['degree'] != null && (strstr($data['degree']->deg_name, "MBA") || strstr($data['degree']->deg_name, 'master'))){
+                $data['is_master'] = 1;
+            }
             $data['title'] = (isset($data['degree']) and ($data['degree'] != null)) ? $data['degree']->deg_name." APPLICATION" : "APPLICATION";
             // dd($data);
             return view('student.online.fill_form', $data);
@@ -283,7 +287,8 @@ class HomeController extends Controller
                     // "high_school_candidate_number"=>'required', 
                     // "high_school_exam_year"=>'required', 
                     // "gce_al_record"=>'required'
-                    "secondary_school"=>'required', "secondary_exam_center"=>'required', "secondary_candidate_number"=>'required', "secondary_exam_year"=>'required', "gce_ol_record"=>'required', 
+                    "secondary_school"=>'nullable', "secondary_exam_center"=>'nullable', "secondary_candidate_number"=>'nullable', "secondary_exam_year"=>'nullable', "gce_ol_record"=>'array',
+                    'previous_training'=>'array', 'employments'=>'array'
                 ]);
                 break;
                 
@@ -310,19 +315,41 @@ class HomeController extends Controller
         }
         // return $request->all();
         $application = \App\Models\ApplicationForm::find($application_id);
-        if($application->degree_id != null and ($application->tranzak_transaction == null || $application->tranzak_transaction->payment_id != $application->degree_id) and !in_array($step, [1, 7])){
-            goto SKIP;
+        if($application->degree_id != null and ($application->tranzak_transaction != null and $application->tranzak_transaction->payment_id == $application->degree_id) and $step == 7){
+            return redirect()->route('student.home')->with('error', "Payment has been made for this application instance");
         }
 
         // persist data
         $data = $request->all();
         if($step == 4){
             // dd($request->collect());
+
             if($request->gce_ol_record)
             $data['gce_ol_record'] = json_encode(array_values($request->gce_ol_record));
             if($request->gce_al_record)
             $data['gce_al_record'] = json_encode(array_values($request->gce_al_record));
-                
+
+            if($request->previous_trainings != null){
+                $data_p1=[];
+                $_data = $request->previous_training;
+                // return $_data;
+                if($_data != null){
+                    foreach ($_data as $key => $value) {
+                        $data_p1[] = ['school'=>$value['school'], 'year'=>$value['year'], 'course'=>$value['course'], 'certificate'=>$value['certificate']];
+                    }
+                    $data['previous_training'] = json_encode($data_p1);
+                    // return $data;
+                }
+                $data_p2 = [];
+                $e_data = $request->employments;
+                if($e_data != null){
+                    foreach ($e_data as $key => $value) {
+                        $data_p2[] = ['employer'=>$value['employer'], 'post'=>$value['post'], 'start'=>$value['start'], 'end'=>$value['end'], 'type'=>$value['type']];
+                    }
+                    $data['employments'] = json_encode($data_p2);
+                    // return $data;
+                }
+            }
             $data = collect($data)->filter(function($value, $key){return $key != '_token';})->toArray();
             $application = ApplicationForm::updateOrInsert(['id'=> $application_id, 'student_id'=>auth('student')->id()], $data);
         }elseif($step == 7){
@@ -407,7 +434,7 @@ class HomeController extends Controller
         if($step == 6){
             if($application->degree_id != null and ($application->tranzak_transaction != null and $application->tranzak_transaction->payment_id == $application->degree_id)){
                 $application->update(['submitted'=>true]);
-                $batch = Batch::find(\App\Helpers\Helpers::instance()->getCurrentAccademicYear())->name;
+                $batch = Batch::find(Helpers::instance()->getCurrentAccademicYear())->name;
                 $school_name = \App\Models\School::first()->name??'';
                 $message = "Hello ".(auth('student')->user()->name??'').", You have successfully submitted application into ".$school_name." for the ".$batch." academic year. Your application is under processing.";
                 $this->sendSmsNotificaition($message, [auth('student')->user()->phone]);
@@ -474,9 +501,14 @@ class HomeController extends Controller
     
                     $appl = ApplicationForm::find($appl_id);
                     $appl->transaction_id = $transaction_instance->id;
-                    $appl->save();
+                    $appl->update(['submitted'=>true, 'transaction_id'=>$transaction_instance->id]);
+                    $batch = Batch::find(Helpers::instance()->getCurrentAccademicYear())->name;
+                    $school_name = \App\Models\School::first()->name??'';
+                    $message = "Hello ".(auth('student')->user()->name??'').", You have successfully submitted application into ".$school_name." for the ".$batch." academic year. Your application is under processing.";
+                    $this->sendSmsNotificaition($message, [auth('student')->user()->phone]);
+                    
+                    return redirect(route("student.home"))->with('success', "Application completed successfully");
     
-                    return redirect(route('student.application.start', ['id'=>$appl->id, 'step'=>1]))->with('success', "Payment successful.");
                     break;
                 
                 case 'CANCELLED':
