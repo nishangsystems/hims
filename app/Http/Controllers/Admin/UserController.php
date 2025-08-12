@@ -65,15 +65,15 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request, [
-            'name' => 'required',
-            'email' => 'required|unique:users|email',
-            'phone' => 'required',
-            'address' => 'nullable',
-            'campus' => 'nullable',
-            'gender' => 'required',
-            'type' => 'required',
-        ]);
+        // $this->validate($request, [
+        //     'name' => 'required',
+        //     'email' => 'required|unique:users|email',
+        //     'phone' => 'required',
+        //     'address' => 'nullable',
+        //     'campus' => 'nullable',
+        //     'gender' => 'required',
+        //     'type' => 'required',
+        // ]);
         $pattern = Matriculation::first();
         $pattern->last_number = $pattern->last_number+1;
         if(User::where('matric', $pattern->pattern . $pattern->last_number)->count() > 0){
