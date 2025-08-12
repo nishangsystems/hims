@@ -77,7 +77,7 @@
                         <div class="py-2 col-sm-6 col-md-4 col-lg-3">
                             <label class="text-secondary  text-capitalize">{{ __('text.ID_card_number') }}</label>
                             <div class="">
-                                <input type="number" class="form-control text-primary"  name="id_card_number" value="{{ $application->id_card_number }}" required>
+                                <input type="text" class="form-control text-primary"  name="id_card_number" value="{{ $application->id_card_number }}" required>
                             </div>
                         </div>
                         <div class="py-2 col-sm-6 col-md-4 col-lg-3">
