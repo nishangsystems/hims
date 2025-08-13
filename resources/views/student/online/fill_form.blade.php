@@ -264,7 +264,10 @@
                                     <select type="text" class="form-control text-primary"  name="secondary_exam_year" required>
                                         <option></option>
                                         @for($i = 2000; $i < (int)(now()->format('Y'))+1; $i++)
-                                            <option value="{{ $i.'/'.$i+1 }}" {{ $application->secondary_exam_year == ($i.'/'.$i+1) ? 'selected' : '' }}>{{ $i.'/'.$i+1 }}</option>
+                                            @php
+                                                $yr = $i.'/'.$i+1;
+                                            @endphp
+                                            <option value="{{ $yr }}" {{ $application->secondary_exam_year == $yr ? 'selected' : '' }}>{{ $yr }}</option>
                                         @endfor
                                     </select>
                                 </div>
@@ -275,7 +278,7 @@
                                         <tr class="text-capitalize">
                                             <th class="text-center border-0" colspan="3">
                                                 <div class="d-flex justify-content-start py-2 w-100">
-                                                    <span class="btn btn-sm px-4 py-1 btn-primary rounded" onclick="addTraining()">add subject</span> <br><span style="text-transform: lowercase; color: skyblue; font-weight: 600;">scroll right for more</span>
+                                                    <span class="btn btn-sm px-4 py-1 btn-primary rounded" onclick="addOlResult()">add subject</span> <br><span style="text-transform: lowercase; color: skyblue; font-weight: 600;">scroll right for more</span>
                                                 </div>
                                             </th>
                                         </tr>
@@ -285,13 +288,13 @@
                                             <th class="text-center border" style="width: 3rem;">{{ __('text.word_grade') }}</th>
                                         <tr>
                                     </thead>
-                                    <tbody id="previous_trainings">
+                                    <tbody id="ol_results">
                                         @foreach (json_decode($application->gce_ol_record)??[] as $key=>$result)
                                             @php
                                                 $ol_key++;
                                             @endphp
                                             <tr class="text-capitalize">
-                                                <td class="border"><span class="btn btn-sm px-4 py-1 btn-danger rounded" onclick="dropTraining(event)">{{ __('text.word_drop') }}</span></td>
+                                                <td class="border"><span class="btn btn-sm px-4 py-1 btn-danger rounded" onclick="dropOlResult(event)">{{ __('text.word_drop') }}</span></td>
                                                 <td class="border"><input class="form-control text-primary"  name="gce_ol_record[{{ $ol_key }}][subject]" required value="{{ $result->subject }}"></td>
                                                 <td class="border">
                                                     <select class="form-control text-primary input imput-sm"  name="gce_ol_record[{{ $ol_key }}][grade]">
@@ -333,7 +336,10 @@
                                     <select type="text" class="form-control text-primary"  name="high_school_exam_year">
                                         <option></option>
                                         @for($i = 2000; $i < (int)(now()->format('Y'))+1; $i++)
-                                            <option value="{{ $i.'/'.$i+1 }}" {{ $application->high_school_exam_year == ($i.'/'.$i+1) ? 'selected' : '' }}>{{ $i.'/'.$i+1 }}</option>
+                                            @php
+                                                $yr = $i.'/'.$i+1;
+                                            @endphp
+                                            <option value="{{ $yr }}" {{ $application->high_school_exam_year == $yr ? 'selected' : '' }}>{{ $yr }}</option>
                                         @endfor
                                     </select>
                                 </div>
@@ -344,7 +350,7 @@
                                         <tr class="text-capitalize">
                                             <th class="text-center border-0" colspan="3">
                                                 <div class="d-flex justify-content-start py-2 w-100">
-                                                    <span class="btn btn-sm px-4 py-1 btn-primary rounded" onclick="addEmployment()">add subject</span> <br><span style="text-transform: lowercase; color: skyblue; font-weight: 600;">scroll right for more</span>
+                                                    <span class="btn btn-sm px-4 py-1 btn-primary rounded" onclick="addAlResult()">add subject</span> <br><span style="text-transform: lowercase; color: skyblue; font-weight: 600;">scroll right for more</span>
                                                 </div>
                                             </th>
                                         </tr>
@@ -354,13 +360,13 @@
                                             <th class="text-center border" style="width: 3rem;">{{ __('text.word_grade') }}</th>
                                         <tr>
                                     </thead>
-                                    <tbody id="employments">
+                                    <tbody id="al_results">
                                         @foreach (json_decode($application->gce_al_record)??[] as $key=>$record)
                                             @php
                                                 $al_key++;
                                             @endphp
                                             <tr class="text-capitalize">
-                                                <td class="border"><span class="btn btn-sm px-4 py-1 btn-danger rounded" onclick="dropEmployment(event)">{{ __('text.word_drop') }}</span></td>
+                                                <td class="border"><span class="btn btn-sm px-4 py-1 btn-danger rounded" onclick="dropAlResult(event)">{{ __('text.word_drop') }}</span></td>
                                                 <td class="border"><input class="form-control text-primary"  name="gce_al_record[{{ $al_key }}][subject]" required value="{{ $record->subject }}"></td>
                                                 <td class="border">
                                                     <select class="form-control text-primary input imput-sm"  name="gce_al_record[{{ $al_key }}][grade]">
@@ -894,6 +900,62 @@
             }
         }
 
+
+        // Add and drop previous trainings form table rows
+        let addAlResult = function(){
+            let key = '_key_'+Date.now()+'_'+Math.random()*10000;
+            let html = `<tr class="text-capitalize">
+                            <td><span class="btn btn-sm px-4 py-1 btn-danger rounded" onclick="dropAlResult(event)">{{ __('text.word_drop') }}</span></td>
+                            <td><input class="form-control text-primary"  name="al_results[${key}][subject]" required value="" placeholder="SUBJECT"></td>
+                            <td>
+                                <select class="form-control text-primary"  name="al_results[${key}][grade]" required>
+                                    <option value=""></option>
+                                    <option value="A">A</option>
+                                    <option value="B">B</option>
+                                    <option value="C">C</option>
+                                    <option value="D">D</option>
+                                    <option value="E">E</option>
+                                </select>
+                            </td>
+                        </tr>`;
+            $('#al_results').append(html);
+        } 
+
+        let dropAlResult = function(event){
+            let training = $(event.target).parent().parent();
+            // let training = $('#previous_trainings').children().last();
+            if(training != null){
+                training.remove();
+            }
+        }
+        // Add and drop employment form table rows
+        let addOlResult = function(){
+            let key = '_key_'+Date.now()+'_'+Math.random()*10000;
+            let html = `<tr class="text-capitalize">
+                            <td><span class="btn btn-sm px-4 py-1 btn-danger rounded" onclick="dropOlResult(event)">{{ __('text.word_drop') }}</span></td>
+                            <td><input class="form-control text-primary"  name="ol_results[${key}][subject]" required value="" placeholder="SUBJECT"></td>
+                            <td>
+                                <select class="form-control text-primary"  name="ol_results[${key}][grade]" required>
+                                    <option value=""></option>
+                                    <option value="A">A</option>
+                                    <option value="B">B</option>
+                                    <option value="C">C</option>
+                                </select>
+                            </td>
+                        </tr>`;
+            $('#ol_results').append(html);
+        } 
+
+        let dropOlResult = function(event){
+            let training = $(event.target).parent().parent();
+            // let training = $('#previous_trainings').children().last();
+            if(training != null){
+                training.remove();
+            }
+        }
+
+
+
                 // Add and drop previous trainings form table rows
         let addTraining = function(){
             let key = `_key_${ Date.now() }_${ Math.random()*1000000 }`;
@@ -956,7 +1018,6 @@
                 training.remove();
             }
         }
-
 
         let check_specify = function(event){
             if(event.target.value == '__SPECIFY__'){
