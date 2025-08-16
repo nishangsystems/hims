@@ -288,7 +288,7 @@
                                             <th class="text-center border" style="width: 3rem;">{{ __('text.word_grade') }}</th>
                                         <tr>
                                     </thead>
-                                    <tbody id="ol_results">
+                                    <tbody id="gce_ol_record">
                                         @foreach (json_decode($application->gce_ol_record)??[] as $key=>$result)
                                             @php
                                                 $ol_key++;
@@ -360,7 +360,7 @@
                                             <th class="text-center border" style="width: 3rem;">{{ __('text.word_grade') }}</th>
                                         <tr>
                                     </thead>
-                                    <tbody id="al_results">
+                                    <tbody id="gce_al_record">
                                         @foreach (json_decode($application->gce_al_record)??[] as $key=>$record)
                                             @php
                                                 $al_key++;
@@ -906,9 +906,9 @@
             let key = '_key_'+Date.now()+'_'+Math.random()*10000;
             let html = `<tr class="text-capitalize">
                             <td><span class="btn btn-sm px-4 py-1 btn-danger rounded" onclick="dropAlResult(event)">{{ __('text.word_drop') }}</span></td>
-                            <td><input class="form-control text-primary"  name="al_results[${key}][subject]" required value="" placeholder="SUBJECT"></td>
+                            <td><input class="form-control text-primary"  name="gce_al_record[${key}][subject]" required value="" placeholder="SUBJECT"></td>
                             <td>
-                                <select class="form-control text-primary"  name="al_results[${key}][grade]" required>
+                                <select class="form-control text-primary"  name="gce_al_record[${key}][grade]" required>
                                     <option value=""></option>
                                     <option value="A">A</option>
                                     <option value="B">B</option>
@@ -918,7 +918,7 @@
                                 </select>
                             </td>
                         </tr>`;
-            $('#al_results').append(html);
+            $('#gce_al_record').append(html);
         } 
 
         let dropAlResult = function(event){
@@ -933,9 +933,9 @@
             let key = '_key_'+Date.now()+'_'+Math.random()*10000;
             let html = `<tr class="text-capitalize">
                             <td><span class="btn btn-sm px-4 py-1 btn-danger rounded" onclick="dropOlResult(event)">{{ __('text.word_drop') }}</span></td>
-                            <td><input class="form-control text-primary"  name="ol_results[${key}][subject]" required value="" placeholder="SUBJECT"></td>
+                            <td><input class="form-control text-primary"  name="gce_ol_record[${key}][subject]" required value="" placeholder="SUBJECT"></td>
                             <td>
-                                <select class="form-control text-primary"  name="ol_results[${key}][grade]" required>
+                                <select class="form-control text-primary"  name="gce_ol_record[${key}][grade]" required>
                                     <option value=""></option>
                                     <option value="A">A</option>
                                     <option value="B">B</option>
@@ -943,7 +943,7 @@
                                 </select>
                             </td>
                         </tr>`;
-            $('#ol_results').append(html);
+            $('#gce_ol_record').append(html);
         } 
 
         let dropOlResult = function(event){
