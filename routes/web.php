@@ -245,22 +245,9 @@ Route::prefix('student')->name('student.')->middleware(['isStudent', 'platform']
     Route::get('edit_profile', 'Student\HomeController@edit_profile')->name('edit_profile');
     Route::post('update_profile', 'Student\HomeController@update_profile')->name('update_profile');
     
-    Route::get('resit/registration', 'Student\HomeController@resit_registration')->name('resit.registration');
-    Route::post('resit/registration', 'Student\HomeController@register_resit');
-    Route::post('resit/registration/payment', 'Student\HomeController@resit_payment')->name('resit.registration.payment');
-    Route::get('resit/registered_courses', 'Student\HomeController@registered_resit_courses')->name('resit.registered_courses');
-    Route::get('resit/index', 'Student\HomeController@resit_index')->name('resit.index');
-    Route::get('resit/download/{resit_id}', 'Student\HomeController@resit_download')->name('resit.download_courses');
-    Route::get('registered_courses/{year?}/{semester?}/{student?}', 'Student\HomeController@registerd_courses')->name('registered_courses');
     Route::get('class-subjects/{level}', 'Student\HomeController@class_subjects')->name('class-subjects');
     Route::get('search_course', 'Student\HomeController@search_course')->name('search_course');
-    Route::get('courses/download/{year}/{semester}', 'Student\HomeController@download_courses')->name('courses.download');
-    Route::get('stock/report/{year}', 'Student\HomeController@stock_report')->name('stock.report');
-    Route::name('transcript.')->prefix('transcripts')->group(function () {
-        Route::get('apply/{config_id?}', 'Student\HomeController@apply_transcript')->name('apply');
-        Route::post('apply/{config_id?}', 'Student\HomeController@apply_save_transcript');
-        Route::get('hostory', 'Student\HomeController@transcript_history')->name('history');
-    });
+
     Route::get('reset_password', 'Controller@reset_password')->name('reset_password');
     Route::post('reset_password', 'Controller@reset_password_save')->name('reset_password');
 
@@ -314,50 +301,6 @@ Route::get('search-students', 'HomeController@search_students')->name('search_st
 Route::get('student-fee-search', 'HomeController@fee')->name('student-fee-search');
 Route::get('student_rank', 'HomeController@rank')->name('student_rank');
 Route::post('student_rank', 'HomeController@rankPost')->name('student_rank');
-
-Route::prefix('course/notification')->name('course.notification.')->group(function(){
-    Route::get('{course_id}', 'Teacher\SubjectController@notifications')->name('index');
-    Route::get('{course_id}/create', 'Teacher\SubjectController@create_notification')->name('create');
-    Route::post('{course_id}/save', 'Teacher\SubjectController@save_notification')->name('save');
-    Route::get('{course_id}/edit/{id}', 'Teacher\SubjectController@edit_notification')->name('edit');
-    Route::post('{course_id}/update/{id}', 'Teacher\SubjectController@update_notification')->name('update');
-    Route::get('{course_id}/delete/{id}', 'Teacher\SubjectController@drop_notification')->name('drop');
-    Route::get('{course_id}/show/{id}', 'Teacher\SubjectController@show_notification')->name('show');
-});
-
-Route::name('faqs.')->prefix('faqs')->group(function(){
-    Route::get('', 'FAQsController@index')->name('index');
-    Route::get('create', 'FAQsController@create')->name('create');
-    Route::post('create', 'FAQsController@save')->name('save');
-    Route::get('edit/{id}', 'FAQsController@edit')->name('edit');
-    Route::get('publish/{id}', 'FAQsController@publish')->name('publish');
-    Route::get('download/{id}', 'FAQsController@download')->name('download');
-    Route::post('update/{id}', 'FAQsController@update')->name('update');
-    Route::get('show/{id}', 'FAQsController@show')->name('show');
-    Route::get('delete/{id}', 'FAQsController@drop')->name('drop');
-});
-
-Route::name('material.')->prefix('{layer}/{layer_id}/material/{campus_id?}')->group(function(){
-    Route::get('', 'MaterialController@index')->name('index');
-    Route::get('create', 'MaterialController@create')->name('create');
-    Route::post('create', 'MaterialController@save')->name('save');
-    Route::get('edit/{id}', 'MaterialController@edit')->name('edit');
-    Route::get('download/{id}', 'MaterialController@download')->name('download');
-    Route::post('update/{id}', 'MaterialController@update')->name('update');
-    Route::get('show/{id}', 'MaterialController@show')->name('show');
-    Route::get('delete/{id}', 'MaterialController@drop')->name('drop');
-});
-
-// ALTERNATIVE NOTIFICATIONS AND MATERIAL APPRAOCH
-Route::name('notifications.')->prefix('{layer}/{layer_id}/notifications/{campus_id?}')->group(function(){
-    Route::get('/', 'NotificationsController@index')->name('index');
-    Route::get('/create', 'NotificationsController@create')->name('create');
-    Route::post('/create', 'NotificationsController@save')->name('save');
-    Route::get('/delete/{id}', 'NotificationsController@drop')->name('drop');
-    Route::get('/edit/{id}', 'NotificationsController@edit')->name('edit');
-    Route::post('/update/{id}', 'NotificationsController@update')->name('update');
-    Route::get('/show/{id}', 'NotificationsController@show')->name('show');
-});
 
 // Messages
 Route::name('messages.')->prefix('messages')->group(function(){

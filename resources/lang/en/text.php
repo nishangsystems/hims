@@ -1011,5 +1011,8 @@ return [
     'configure_degree_certificates'=>'configure degree certificates',
     'admission_letter'=>'admission letter',
     'active_head_of_school'=>'active head of school',
+    'print_receipt'=>'print receipt',
+    'momo_payment_reciept'=>'momo payment reciept',
+    'paid_through'=>'paid through',
     ''
 ];

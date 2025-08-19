@@ -60,4 +60,11 @@ class Students extends Authenticatable
         return $this->hasMany(ApplicationForm::class, 'student_id');
     }
 
+    public function transactions(){
+        return $this->belongsToMany(TranzakTransaction::class, ApplicationForm::class, 'student_id', 'transaction_id');
+    }
+
+    public function platform_transactions() {
+        return $this->hasMany(Charge::class, 'student_id');
+    }
 }

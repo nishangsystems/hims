@@ -26,7 +26,8 @@
                             <td class="border-left border-right">{{ $programs->where('id', $appl->program)->first()->name??'' }}</td>
                             <td class="border-left border-right">
                                 @if(isset($action))
-                                    <a href="{{ Request::url().'/'.$appl->id }}" class="btn mt-1 btn-xs btn-primary">{{ $action }}</a>
+                                    <a href="{{ Request::url().'/'.$appl->id }}" class="btn mt-1 btn-xs btn-primary">{{ $action }}</a>|
+                                    <a href="{{ route('admin.admission.show', $appl->id) }}" class="btn mt-1 btn-xs btn-success">@lang('text.word_show')</a>
                                 @endif
                                 @if(isset($bypass))
                                     |<a href="{{ route('admin.applications.bypass', $appl->id) }}" class="btn mt-1 btn-xs btn-primary">{{ $bypass }}</a>

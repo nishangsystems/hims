@@ -174,7 +174,7 @@
                         <div class="py-2 col-sm-6 col-md-4 col-lg-4">
                             <label class="text-secondary  text-capitalize">{{ __('text.word_email_bilang') }}</label>
                             <div class="">
-                                <input type="email" class="form-control text-primary"  name="email" value="{{ auth('student')->user()->email }}" {{ auth('student')->user()->email != null ? 'readonly' : '' }}>
+                                <input type="email" class="form-control text-primary"  name="email" value="{{ $application->email ?? auth('student')->user()->email }}" {{ auth('student')->user()->email != null ? 'readonly' : '' }}>
                             </div>
                         </div>
                         <div class="py-2 col-sm-6 col-md-4 col-lg-5">

@@ -910,5 +910,13 @@ class HomeController extends Controller
         return $this->app_service->admission_letter($appl_id);
     }
 
+    public function payment_data(Request $request){
+        $data['title'] = "Transaction History";
+        $charges = auth('student')->user()->platform_transactions()->get();
+        $data['payments'] = auth('student')->user()->transactions()->get()->merge($charges);
+        $data['programs'] = collect(json_decode($this->api_service->programs())->data);
+        return view('student.online.payment_data', $data);
+    }
+
 
 }

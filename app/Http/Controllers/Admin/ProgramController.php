@@ -997,8 +997,28 @@ class ProgramController extends Controller
     public function application_details(Request $request, $id)
     {
         # code...
-        $data['application'] = ApplicationForm::find($id);
+        $application = ApplicationForm::find($id);
+    
+        if($application->degree_id != null and ($application->tranzak_transaction != null and $application->tranzak_transaction->payment_id == $application->degree_id) and $step == 6){
+            return redirect()->route('student.home')->with('error', "Payment has been made for this application instance");
+        }
+        $data['certificates'] = collect(json_decode($this->api_service->certificates())->data);
+        $data['application'] = $application;
+        if($application->entry_qualification != null){
+            // dd($application);
+            // dd($this->api_service->campusDegreeCertificatePrograms($application->campus_id, $application->degree_id, $application->entry_qualification));
+            $data['programs'] = collect(json_decode($this->api_service->campusDegreeCertificatePrograms($application->campus_id, $application->degree_id, $application->entry_qualification))->data??[]);
+        }
+        // $data['aux_programs'] = \App\Models\Program::where('type', 'auxiliary')->get();
+        $data['degrees'] = collect(json_decode($this->api_service->degrees())->data);
+        $data['degree'] = $application->degree_id == null ? null : $data['degrees']->where('id', $application->degree_id)->first();
+        if($data['degree'] != null && (strstr($data['degree']->deg_name, "MBA") || strstr($data['degree']->deg_name, 'master'))){
+            $data['is_master'] = 1;
+        }
+        // dd($data);
         $data['title'] = "Application Details For ".$data['application']->name;
+        return view('admin.student.show_form', $data);
+
         
     }
 
