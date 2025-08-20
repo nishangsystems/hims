@@ -1012,6 +1012,7 @@ class ProgramController extends Controller
         if($data['degree'] != null && (strstr($data['degree']->deg_name, "MBA") || strstr($data['degree']->deg_name, 'master'))){
             $data['is_master'] = 1;
         }
+        $data['certificates'] = collect(json_decode($this->api_service->certificates())->data);
         // dd($data);
         $data['title'] = "Application Details For ".$data['application']->name;
         return view('admin.student.show_form', $data);
