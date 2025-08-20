@@ -999,9 +999,6 @@ class ProgramController extends Controller
         # code...
         $application = ApplicationForm::find($id);
     
-        if($application->degree_id != null and ($application->tranzak_transaction != null and $application->tranzak_transaction->payment_id == $application->degree_id) and $step == 6){
-            return redirect()->route('student.home')->with('error', "Payment has been made for this application instance");
-        }
         $data['certificates'] = collect(json_decode($this->api_service->certificates())->data);
         $data['application'] = $application;
         if($application->entry_qualification != null){
