@@ -72,6 +72,13 @@
         .dropdown-toggle:after {
             display: none;
         }
+
+        #footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+        }
         
     </STYLE>
 @php
@@ -81,13 +88,13 @@
 @endphp
 </head>
 <body class="no-skin">
-    <div class="" style="background-color: white;">
+    <div class="" style="background-color: white; margin-inline: 2.5rem;">
         <img src="{{ asset('assets/images/header.png') }}" style="width: 100%; max-height: 28rem; margin-bottom: 1rem;">
         @isset($title)
             <div class="text-center text-black h3 py-2">{{$title ?? ''}}</div>
         @endisset
         @yield('section')
-        <img src="{{ asset('assets/images/footer.png') }}" style="width: 100%; max-height: 20rem; margin-top: 1rem;">
+        <img src="{{ asset('assets/images/footer.png') }}" style="width: 100%; max-height: 20rem; margin-top: 1rem;" id="footer">
     </div>
 <script src="{{asset('assets/js/jquery-2.1.4.min.js')}}"></script>
 <script src="{{asset('assets/js/bootstrap.min.js')}}"></script>

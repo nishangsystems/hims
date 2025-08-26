@@ -507,7 +507,7 @@
                         <div class="col-sm-12 col-md-6 col-lg-6">
                             <label class="text-secondary  text-capitalize">{{ __('text.word_program') }}</label>
                             <div class="">
-                                <select class="form-control text-capitalize text-primary" name="program" required >
+                                <select class="form-control text-capitalize text-primary" name="program" required onchange="loadCpLevels(event)">
                                     <option></option>
                                     @foreach($programs as $program)
                                         <option value="{{ $program->id }}" {{ old('program', $application->program) == $program->id ? 'selected' : '' }}>{{ $program->name }}</option>
@@ -515,6 +515,8 @@
                                 </select>
                             </div>
                         </div>
+
+                        <input type="hidden" name="level" id="level_field">
                         
                         <div class="col-sm-12 col-md-12 col-lg-12 py-4 d-flex justify-content-center">
                             <a href="{{ route('student.application.start', [$step-1, $application->id]) }}" class="px-4 py-1 btn btn-lg btn-danger">{{ __('text.word_back') }}</a>
@@ -1109,7 +1111,11 @@
                 success : function(data){
                     console.log(data);
                     let html = `<option></option>`;
+                    let  i = 1;
                     data.forEach(element=>{
+                        if(i == 1){
+                            $('#level_field').val(element.level);
+                        }
                         html += `<option value="${element.level}" ${ "{{ $application->level }}" == element.level ? 'selected' : ''}>${element.level}</option>`;
                     });
                     $('#cplevels').html(html);

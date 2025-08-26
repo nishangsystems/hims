@@ -37,6 +37,7 @@ class AppService{
             $data['_year'] = substr($appl->year->name, 2, 2);
             // dd($data);
             // $data['title'] = "ADMISSION LETTER";
+            $degrees = collect(json_decode($this->api_service->degrees())->data);
             $data['name'] = $appl->name;
             $data['first_name'] = explode(' ', $appl->name)[0];
             $data['matric'] =  $appl->matric;
@@ -45,12 +46,12 @@ class AppService{
             $data['fee2_dateline'] = $config->fee2_latest_date;
             $data['help_email'] =  $config->help_email;
             $data['campus'] = $campus->name??null;
-            $data['degree'] = ($program->deg_name??null) == null ? ("NOT SET") : $program->deg_name;
+            $data['degree'] = ($program->deg_name??null) == null ? ($degrees->where('id', $appl->degree_id)->first()?->deg_name??'') : $program->deg_name;
             $data['program'] = str_replace($data['degree'], ' ', $program->name??"");
             $data['_program'] = $program;
             $data['matric_sn'] = substr($appl->matric, -3);
             $data['department'] = $department->name??'-------';
-            $data['start_of_lectures'] = Config::where('year_id', Helpers::instance()->getCurrentAccademicYear())->first()->start_of_lectures??'';
+            $data['start_of_lectures'] = Config::where('year_id', Helpers::instance()->getCurrentAccademicYear())->first()->start_of_lectures??'DATE-NOT-SET';
             // dd($program);
             if($data['degree'] ==  null){
                 session()->flash('error', 'Program Degree Name not set');
