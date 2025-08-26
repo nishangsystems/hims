@@ -81,6 +81,12 @@
             width: 100%;
         }
 
+        @media print{
+            body{
+                padding-inline: 4rem !important;
+            }
+        }
+
         
     </STYLE>
 @php
