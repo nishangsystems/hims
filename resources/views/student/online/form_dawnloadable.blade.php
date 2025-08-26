@@ -19,7 +19,7 @@
                 <div class="py-4 my-3 text-center shadow">
                     <h4 class="text-uppercase text-dark">undergraduate admission form</h4><br><span class="text-primary">IN</span>
                     <label class="d-block py-2">Programme: <b>{{ $program->name }}</b></label>
-                    <label class="d-block py-2">Level: ________________________________________________</label>
+                    <label class="d-block py-2">Level: <span style="border-bottom: 1px solid gray; padding-inline: 2rem;">{{ $application->level??'' }}</span> </label>
                 </div>
                     <label class="d-block py-4 text-center">Academic Year<br> <b style="text-decoration: underline; padding-inline: 2rem;">{{ $application->year->name }}</b></label>
             </div>

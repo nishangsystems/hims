@@ -75,6 +75,7 @@ class AppService{
             $data['department'] = collect(json_decode($this->api_service->school_program_structure())->data)->where('program_id', $application->program)->first();
             $data['cert'] = collect($data['certs'])->where('id', $data['application']->entry_qualification)->first();
             $data['program'] = $programs->where('id', $data['application']->program)->first();
+            $levels = collect(json_decode($this->api_service->levels())->data);
             
             $title = __('text.inst_tapplication_form', ['degree'=>$data['degree']->deg_name]);
             $data['title'] = $title;
