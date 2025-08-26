@@ -64,6 +64,13 @@
         .dropdown-toggle:after {
             display: none;
         }
+
+        
+        .page-break {
+            page-break-before: auto;
+            page-break-after: auto;
+            page-break-inside: avoid
+        }
     </STYLE>
     @php
         $bg1 = \App\Http\Controllers\HomeController::getColor('background_color_1');

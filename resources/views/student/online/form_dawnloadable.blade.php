@@ -36,7 +36,7 @@
             </div>
         </div>
     </div>
-    <div class="py-2">
+    <div class="py-2 page-break">
         <div class="bg-white px-3 py-1">
             <h4 class="text-uppercase py-1" style="font-weight: 700;">admission requirements</h4>
             <h4 class="text-capitalize" style="font-weight: 700;">Ensure to attach the following documents:</h4>
@@ -93,7 +93,7 @@
             <div class="text-capitalize py-1 mx-1 my-2 px-3 rounded border" style="width: 22%; display: inline-block;"><span class="text-secondary" style="font-weight: 700;">address<span> : <span class="text-dark" style="font-weight: 700;">{{ $application->sponsor_address }}<span></div>
         </div> 
     </div>
-    <div class="py-2">
+    <div class="py-2 page-break">
         <div class="bg-white px-3 py-1">
             <h4 class="text-uppercase py-1 w-100" style="font-weight: 700;">qualifications / academic records</h4>
             <div class="bg-white px-3 py-1 d-flex justify-content-between">
@@ -200,7 +200,7 @@
                 I <span style="font-weight : 700;">{{ $application->name }}</span>, certify that the information given in this application, to the best of my knowledge, is complete and accurate.
                 I further understand that falsification or failure to supply correct information may lead to disqualification of my application or my admission to the programme.
                 I confirm that I have adequate resources to meet the financial obligations throughout my studies.<br>
-                <span style="font-weight : 700; display: block; padding-block: 1rem;">Signature: _________________________ Date: __________________________ </span>
+                <span style="font-weight : 700; display: block; padding-top: 2.5rem;">Signature: _________________________ Date: __________________________ </span>
             </div>
         </div> 
     </div>
@@ -234,7 +234,7 @@
                     </thead>
                     <tbody>
                         <tr class="border-top border-bottom py-2">
-                            <td class="border-left border-right py-4">{{ $department->department }}</td>
+                            <td class="border-left border-right py-4">{{ $department->school }}</td>
                             <td class="border-left border-right py-4">{{ $degree->deg_name }}</td>
                             <td class="border-left border-right py-4">{{ $program->name }}</td>
                         </tr>

@@ -34,8 +34,9 @@
 
     <STYLE>
         body {
-            font-family: Arial, Helvetica, sans-serif;
+            font-family: 'Times New Roman', Times, serif;
             background: white;
+            padding-inline: 4rem !important;
         }
         .input-group {
             position: relative;
@@ -79,6 +80,7 @@
             left: 0;
             width: 100%;
         }
+
         
     </STYLE>
 @php
@@ -88,7 +90,7 @@
 @endphp
 </head>
 <body class="no-skin">
-    <div class="" style="background-color: white; margin-inline: 2.5rem;">
+    <div class="" style="background-color: white;">
         <img src="{{ asset('assets/images/header.png') }}" style="width: 100%; max-height: 28rem; margin-bottom: 1rem;">
         @isset($title)
             <div class="text-center text-black h3 py-2">{{$title ?? ''}}</div>
