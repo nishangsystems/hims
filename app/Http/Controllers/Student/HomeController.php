@@ -425,7 +425,7 @@ class HomeController extends Controller
             // $data = $request->all();
             if($request->program != null){
                 $levels = collect(json_decode($this->api_service->campusProgramLevels($application->campus_id, $request->program))->data);
-                dd($levels);
+                // dd($levels);
                 $data['level'] = $levels->first()?->level??'';
             }
             $data = collect($data)->filter(function($value, $key){return $key != '_token';})->toArray();
