@@ -373,6 +373,7 @@ class HomeController extends Controller
                 }
             }
             $headers = ['Authorization'=>'Bearer '.cache($tranzak_credentials->cache_token_key)];
+            // dd($headers);
             if($request->channel == 'bank'){
                 // $return_url = "192.168.2.196/NISHANG/ssp2_univ_apl_port/api/tranzak/web_redirect/return_callback";
                 // $request_data = ['mchTransactionRef'=>'_apl_fee_'.time().'_'.random_int(1, 9999), "amount"=> $request->amount, "currencyCode"=> "XAF", "description"=>"Payment for application fee into HIMS UNIVERSITY INSTITUTE", 'returnUrl'=>$return_url, 'cancelUrl'=>$return_url];

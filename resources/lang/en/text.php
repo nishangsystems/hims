@@ -1014,5 +1014,6 @@ return [
     'print_receipt'=>'print receipt',
     'momo_payment_reciept'=>'momo payment reciept',
     'paid_through'=>'paid through',
+    'admission_report'=>'admission report',
     ''
 ];

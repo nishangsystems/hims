@@ -220,6 +220,7 @@ Route::prefix('admin')->name('admin.')->middleware('isAdmin')->group(function ()
         Route::get('by_program/{id?}', [ProgramController::class, 'applications_per_program'])->name('by_program');
         Route::get('by_degree/{id?}', [ProgramController::class, 'applications_per_degree'])->name('by_degree');
         Route::get('finance/general', [ProgramController::class, 'finance_general_report'])->name('finance.general');
+        Route::get('admission_report', [ProgramController::class, 'admission_report'])->name('admission_report');
 
     });
     Route::prefix('reports')->name('reports.')->group(function(){
