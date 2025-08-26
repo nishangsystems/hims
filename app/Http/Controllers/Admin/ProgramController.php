@@ -677,8 +677,9 @@ class ProgramController extends Controller
         // $data['degrees'] = collect(json_decode($this->api_service->degrees())->data);
         // $data['certificates'] = collect(json_decode($this->api_service->certificates())->data);
         $data['structure'] = collect($this->api_service->school_program_structure()->get('data'));
+        // dd($data['structure']->where('program_id', 76)->first()['department']);
         $data['applications'] = ApplicationForm::whereNotNull('matric')->orderBy('name')->get()->each(function($rec) use($data){
-            $rec->department = $data['structure']->where('program_id', $rec->program)->first()?->department??'';
+            $rec->department = $data['structure']->where('program_id', $rec->program)->first()['department']??'';
         });
         if($request->action){
             $fname = 'admisison_report'.time().'.csv';
