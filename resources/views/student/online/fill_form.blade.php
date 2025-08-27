@@ -285,6 +285,8 @@
                                         <th class="text-center border"></th>
                                         <th class="text-center border">{{ __('text.subject_attempted') }}</th>
                                         <th class="text-center border" style="width: 3rem;">{{ __('text.word_grade') }}</th>
+                                        <th class="text-center border" style="width: 3rem;">Coef (CAP)</th>
+                                        <th class="text-center border" style="width: 3rem;">Note * Coef (CAP)</th>
                                     <tr>
                                 </thead>
                                 <tbody id="gce_ol_record">
@@ -303,6 +305,8 @@
                                                     <option value="C" {{ $result->grade == 'C' ? 'selected' : '' }}>C</option>
                                                 </select>
                                             </td>
+                                            <td class="border"><input class="form-control text-primary"  name="gce_ol_record[{{ $ol_key }}][coef]" required value="{{ $result->coef??'' }}"></td>
+                                            <td class="border"><input class="form-control text-primary"  name="gce_ol_record[{{ $ol_key }}][nc]" required value="{{ $result->nc??'' }}"></td>
                                         </tr>
                                     @endforeach
                                 </tbody>
@@ -357,6 +361,8 @@
                                         <th class="text-center border"></th>
                                         <th class="text-center border">{{ __('text.subject_attempted') }}</th>
                                         <th class="text-center border" style="width: 3rem;">{{ __('text.word_grade') }}</th>
+                                        <th class="text-center border" style="width: 3rem;">Coef (BACC)</th>
+                                        <th class="text-center border" style="width: 3rem;">Note * Coef (BACC)</th>
                                     <tr>
                                 </thead>
                                 <tbody id="gce_al_record">
@@ -377,6 +383,8 @@
                                                     <option value="E" {{ $record->grade == 'E' ? 'selected' : '' }}>E</option>
                                                 </select>
                                             </td>
+                                            <td class="border"><input class="form-control text-primary"  name="gce_al_record[{{ $al_key }}][coef]" required value="{{ $record->coef??'' }}"></td>
+                                            <td class="border"><input class="form-control text-primary"  name="gce_al_record[{{ $al_key }}][nc]" required value="{{ $record->nc??'' }}"></td>
                                         </tr>
                                     @endforeach
                                 </tbody>
@@ -711,6 +719,8 @@
                                         <tr class="text-capitalize">
                                             <th class="text-center border">{{ __('text.word_subject') }}</th>
                                             <th class="text-center border">{{ __('text.word_grade') }}</th>
+                                            <th class="text-center border">Coef (CAP)</th>
+                                            <th class="text-center border">Note * Coef (CAP)</th>
                                         <tr>
                                     </thead>
                                     <tbody id="previous_trainings">
@@ -718,6 +728,8 @@
                                             <tr class="text-capitalize">
                                                 <td class="border"><label class="form-control text-primary border-0">{{ $rec->subject }}</label></td>
                                                 <td class="border"><label class="form-control text-primary border-0">{{ $rec->grade }}</label></td>
+                                                <td class="border"><label class="form-control text-primary border-0">{{ $rec->coef??'' }}</label></td>
+                                                <td class="border"><label class="form-control text-primary border-0">{{ $rec->nc??'' }}</label></td>
                                             </tr>
                                         @endforeach
                                     </tbody>
@@ -755,6 +767,8 @@
                                         <tr class="text-capitalize">
                                             <th class="text-center border">{{ __('text.word_subject') }}</th>
                                             <th class="text-center border">{{ __('text.word_grade') }}</th>
+                                            <th class="text-center border">Coef (BACC)</th>
+                                            <th class="text-center border">Note * Coef (BACC)</th>
                                         <tr>
                                     </thead>
                                     <tbody id="employments">
@@ -762,6 +776,8 @@
                                             <tr class="text-capitalize">
                                                 <td class="border"><label class="form-control text-primary border-0">{{ $rec->subject }}</label></td>
                                                 <td class="border"><label class="form-control text-primary border-0">{{ $rec->grade }}</label></td>
+                                                <td class="border"><label class="form-control text-primary border-0">{{ $rec->coef??'' }}</label></td>
+                                                <td class="border"><label class="form-control text-primary border-0">{{ $rec->nc??'' }}</label></td>
                                             </tr>
                                         @endforeach
                                     </tbody>
@@ -925,6 +941,8 @@
                                     <option value="E">E</option>
                                 </select>
                             </td>
+                            <td><input class="form-control text-primary"  name="gce_al_record[${key}][coef]" required value="" placeholder="COEF"></td>
+                            <td><input class="form-control text-primary"  name="gce_al_record[${key}][nc]" required value="" placeholder="NOTE*COEF"></td>
                         </tr>`;
             $('#gce_al_record').append(html);
         } 
@@ -950,6 +968,8 @@
                                     <option value="C">C</option>
                                 </select>
                             </td>
+                            <td><input class="form-control text-primary"  name="gce_ol_record[${key}][coef]" required value="" placeholder="COEF"></td>
+                            <td><input class="form-control text-primary"  name="gce_ol_record[${key}][nc]" required value="" placeholder="NOTE * COEF"></td>
                         </tr>`;
             $('#gce_ol_record').append(html);
         } 
