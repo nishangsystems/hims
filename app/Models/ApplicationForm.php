@@ -33,6 +33,10 @@ class ApplicationForm extends Model
         ]);
     }
 
+    public function alternate(){
+        return in_array($this->degree_id, [3, 6]);
+    }
+
     public function student()
     {
         # code...

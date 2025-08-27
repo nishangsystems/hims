@@ -17,20 +17,20 @@
                     <span class="d-block text-primary" style="font-size: 1rem">Website: www.himsbuea.org</span>
                 </div>
                 <div class="py-4 my-3 text-center shadow">
-                    <h4 class="text-uppercase text-dark">undergraduate admission form</h4><br><span class="text-primary">IN</span>
+                    <span class="text-uppercase text-dark" style="font-size: 2rem; font-weight: 700;"><b>@if ($application->degree_id == 6) Graduate @else Undergraduate @endif admission form</b></span>
                     <label class="d-block py-2">Programme: <b>{{ $program->name }}</b></label>
-                    <label class="d-block py-2">Level: <span style="border-bottom: 1px solid gray; padding-inline: 2rem;">{{ $application->level??'' }}</span> </label>
+                    @if($application->degree_id != 6) <label class="d-block py-2">Level: <span style="border-bottom: 1px solid gray; padding-inline: 2rem;">{{ $application->level??'' }}</span> </label> @endif
                 </div>
                     <label class="d-block py-4 text-center">Academic Year<br> <b style="text-decoration: underline; padding-inline: 2rem;">{{ $application->year->name }}</b></label>
             </div>
-            <div class="mx-auto py-2 justify-content-between text-primary" style=" font-style: italic; width: 80%; margin-inline: auto; display: flex; justify-content: between">
-                <span style="width: 30%; display: inline-block;" class="shadow px-3 py-3 text-center">
+            <div class="mx-auto py-2 justify-content-between text-primary" style=" font-style: italic; width: 90%; margin-inline: auto; display: flex; justify-content: between;">
+                <span style="width: 30%; height: 14rem; display: inline-block; border: 2px outset black; border-radius: 0.5rem;" class="px-3 py-3 text-center">
                     Name of admission officer: <br> _____________________ <br> Signature: <br> _____________________ <br> Date: <br> _____________________
                 </span>
-                <span style="width: 25%; display: inline-block;" class="shadow px-3 py-3 text-center">
+                <span style="width: 25%; height: 14rem; display: inline-block; border: 2px outset black; border-radius: 0.5rem;" class="px-3 py-3 text-center">
                     Affix a <br> passport size <br> photo here
                 </span>
-                <span style="width: 30%; display: inline-block;" class="shadow px-3 py-3 text-center">
+                <span style="width: 30%; height: 14rem; display: inline-block; border: 2px outset black; border-radius: 0.5rem;" class="px-3 py-3 text-center">
                     <span class="text-dark">ADMISSION DECISSION</span><br>ADMITTED: <input type="checkbox" style="width:2rem; height: 2rem;"> <br> NOT ADMITTED: <input type="checkbox" style="width:2rem; height: 2rem;"> <br> OBSERVATION <br> _____________________
                 </span>
             </div>
@@ -40,25 +40,38 @@
         <div class="bg-white px-3 py-1">
             <h4 class="text-uppercase py-1" style="font-weight: 700;">admission requirements</h4>
             <h4 class="text-capitalize" style="font-weight: 700;">Ensure to attach the following documents:</h4>
-            <h5 class="text-capitalize" style="font-weight: 700;">for HND</h5>
-            <ul style="list-style-type: circle; padding-left: 1rem;">
-                <li class="text-capitalize">2 photocopies of GCE ordinary level slip/certificate or probatoire</li>
-                <li class="text-capitalize">2 photocopies of GCE advanced level slip/certificate or Baccalaureat</li>
-                <li class="text-capitalize">2 photocopies of birth certificate</li>
-                <li class="text-capitalize">2 photocopies of valid national ID card</li>
-                <li class="text-capitalize">2 passport sized photographs</li>
-            </ul>
-            <h5 class="text-capitalize" style="font-weight: 700;">for B.TECH/BBA</h5>
-            <ul style="list-style-type: circle; padding-left: 1rem;">
-                <li class="text-capitalize">Certified copy of HND result slip or certificate (By the ministry of higher education)</li>
-                <li class="text-capitalize">photocopy of advanced level certificate or equivalent</li>
-                <li class="text-capitalize">photocopy of ordinary level certificate or equivalent</li>
-                <li class="text-capitalize">certified copy of birth certificate</li>
-                <li class="text-capitalize">medical certificate of fitness from a government hospital</li>
-                <li class="text-capitalize">4 coloured passport sized photographs</li>
-                <li class="text-capitalize">Signed year 1&2 or HND school transcript (from your institution)</li>
-                <li class="text-capitalize">photocopy of valid national ID card</li>
-            </ul>
+            @if($application->degree_id != 6)
+                <h5 class="text-capitalize" style="font-weight: 700;">for HND</h5>
+                <ul style="list-style-type: circle; padding-left: 1rem;">
+                    <li class="text-capitalize">2 photocopies of GCE ordinary level slip/certificate or probatoire</li>
+                    <li class="text-capitalize">2 photocopies of GCE advanced level slip/certificate or Baccalaureat</li>
+                    <li class="text-capitalize">2 photocopies of birth certificate</li>
+                    <li class="text-capitalize">2 photocopies of valid national ID card</li>
+                    <li class="text-capitalize">2 passport sized photographs</li>
+                </ul>
+                <h5 class="text-capitalize" style="font-weight: 700;">for B.TECH/BBA</h5>
+                <ul style="list-style-type: circle; padding-left: 1rem;">
+                    <li class="text-capitalize">Certified copy of HND result slip or certificate (By the ministry of higher education)</li>
+                    <li class="text-capitalize">photocopy of advanced level certificate or equivalent</li>
+                    <li class="text-capitalize">certified copy of birth certificate</li>
+                    <li class="text-capitalize">4 coloured passport sized photographs</li>
+                    <li class="text-capitalize">photocopy of advanced level certificate or equivalent</li>
+                    <li class="text-capitalize">medical certificate of fitness from a government hospital</li>
+                    <li class="text-capitalize">Signed year 1&2 or HND school transcript (from your institution)</li>
+                </ul>
+            @endif
+            @if($application->degree_id == 6)
+                <h5 class="text-capitalize" style="font-weight: 700;">for MBA</h5>
+                <ul style="list-style-type: circle; padding-left: 1rem;">
+                    <li class="text-capitalize">Certified copy of Birth Certificate and National Identification Card</li>
+                    <li class="text-capitalize">Photocopies of all academic certificates namely; O/L, A/L, B.Sc/B.Aor equivalents</li>
+                    <li class="text-capitalize">Copy of undergraduate transcript</li>
+                    <li class="text-capitalize">4(Four) coloured passport sized photographs</li>
+                    <li class="text-capitalize">A motivation letter clearly stating your carrier path and how the chosen program will meet the carrier aspirations</li>
+                    <li class="text-capitalize">Two letters of recommendation from a Univeristy Lecturer or Practitioner; and</li>
+                    <li class="text-capitalize">Curriculum Vitae</li>
+                </ul>
+            @endif
         </div> 
     </div>
     <h5 style="font-weight: 700; font-style: italic;">NB: upon admission, candidate(s) may be required to present originals for the purpose of authentification.</h5>
@@ -97,8 +110,8 @@
         <div class="bg-white px-3 py-1">
             <h4 class="text-uppercase py-1 w-100" style="font-weight: 700;">qualifications / academic records</h4>
             <div class="bg-white px-3 py-1 d-flex justify-content-between">
-                <div class="text-capitalize my-2 p-0 rounded border w-100" style="width: 100%; display: inline-block;">
-                    <table >
+                <div class="text-capitalize my-2 p-0 rounded w-100" style="width: 100%; display: inline-block;">
+                    <table>
                         <thead class="text-dark border border-2 border-dark py-3" style="font-weight: 700; font-size: 1.6rem;">
                             <tr>
                                 <th class="border border-2 border-dark text-center text-uppercase" colspan="5">GCE O/L or equivalent</th>
@@ -179,6 +192,53 @@
                             @endif
                         </tbody>
                     </table>
+                    @if ($application->alternate())
+                        <table>
+                            <thead class="text-dark border border-2 border-dark py-3" style="font-weight: 700; font-size: 1.6rem;">
+                                <tr>
+                                    <th class="border border-2 border-dark text-center text-uppercase" colspan="5">@if($application->degree_id == 6) @lang('text.bachelors_degree_bilang') @else HND Result @endif</th>
+                                </tr>
+                                <tr>
+                                    <th class="border-left border-right w-25 text-capitalize">Year</th>
+                                    <th class="border-left border-right border-2 border-dark">Institution</th>
+                                    <th class="border-left border-right border-2 border-dark">Specialty</th>
+                                    <th class="border-left border-right border-2 border-dark">GPA/Average</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (json_decode($application->previous_training) as $key => $training)
+                                    <tr>
+                                        <th class="border-left border-right w-25 text-capitalize">{{ $training->year??'' }}</th>
+                                        <th class="border-left border-right w-25 text-capitalize">{{ $training->school??'' }}</th>
+                                        <th class="border-left border-right w-25 text-capitalize">{{ $training->course??'' }}</th>
+                                        <th class="border-left border-right w-25 text-capitalize">{{ $training->gpa??'' }}</th>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                        @if($application->employments != null)
+                            <h4 class="text-uppercase py-1 w-100" style="font-weight: 700;">@lang('text.employment_history_bilang')</h4>
+                            <table>
+                                <thead class="text-dark border border-2 border-dark py-3" style="font-weight: 700; font-size: 1.6rem;">
+                                    <tr>
+                                        <th class="border-left border-right w-25 text-capitalize">Period</th>
+                                        <th class="border-left border-right border-2 border-dark">Institution/Employer</th>
+                                        <th class="border-left border-right border-2 border-dark">Position</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (json_decode($application->employments) as $key => $emp)
+                                        <tr>
+                                            <th class="border-left border-right w-25 text-capitalize">{{ $emp->start??'start-date' }} - {{ $emp->end??'end-date' }}</th>
+                                            <th class="border-left border-right w-25 text-capitalize">{{ $emp->employer??'' }}</th>
+                                            <th class="border-left border-right w-25 text-capitalize">{{ $emp->post??'' }}</th>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                            
+                        @endif
+                    @endif
                 </div>
             </div>
             {{-- <div class="bg-white px-3 py-1 d-flex justify-content-between">

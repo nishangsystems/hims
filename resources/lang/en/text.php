@@ -845,6 +845,7 @@ return [
     'language_proficiency_bilang'=>'language proficiency / maitrise des langues',
     'medical_history_bilang'=>'medical history / antecedents medicale',
     'entry_qualification_bilang'=>'entry qualification / diplome ou certificat d\'entree',
+    'bachelors_degree_bilang'=>'Bachelor\'s Degree / Baccalauréat Universitaire',
     'previous_higher_education_training_bilang'=>'previous higher education training / formations superieur',
     'employment_history_bilang'=>'employment history / antecedents professionnels',
     'financial_obligation_bilang'=>'financial obligation / obligations financieres',
@@ -1015,5 +1016,10 @@ return [
     'momo_payment_reciept'=>'momo payment reciept',
     'paid_through'=>'paid through',
     'admission_report'=>'admission report',
+    'gpa_slash_average'=>'GPA/Average',
+    'entry_certificate'=>'entry certificate',
+    'word_institution'=>'institution',
+    'hims_decision'=>'HIMS decision',
+    'registration_number'=>'registration number',
     ''
 ];

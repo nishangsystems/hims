@@ -13,6 +13,11 @@
                 <th>@lang('text.word_department')</th>
                 <th>@lang('text.place_of_birth')</th>
                 <th>@lang('text.word_nationality')</th>
+                <th>@lang('text.entry_certificate')</th>
+                <th>@lang('text.word_institution')</th>
+                <th>@lang('text.word_grade')</th>
+                <th>@lang('text.hims_decision')</th>
+                <th>Decision of UBa-HIMS joined Admission Board</th>
             </thead>
             <tbody>
                 @php
@@ -27,6 +32,11 @@
                         <td>{{ $appl->department??'' }}</td>
                         <td>{{ $appl->dob?->format('d-m-Y') }} <br> {{ $appl->pob }} </td>
                         <td>{{ $appl->nationality }} </td>
+                        <td>{{ $appl->certificate??'' }} </td>
+                        <td>{{ $appl->school??'' }} </td>
+                        <td>{{ $appl->grade??'' }} </td>
+                        <td>Favourable </td>
+                        <td>Admitted </td>
                     </tr>
                 @endforeach
             </tbody>

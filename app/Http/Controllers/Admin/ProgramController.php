@@ -678,16 +678,42 @@ class ProgramController extends Controller
         // $data['certificates'] = collect(json_decode($this->api_service->certificates())->data);
         $data['structure'] = collect($this->api_service->school_program_structure()->get('data'));
         // dd($data['structure']->where('program_id', 76)->first()['department']);
-        $data['applications'] = ApplicationForm::whereNotNull('matric')->orderBy('name')->get()->each(function($rec) use($data){
+        $gpa_classes = collect([
+                ['lower' => '3.60', 'upper' => '4.00', 'class' => 'First Class', 'short' => 'First Class'],
+                ['lower' => '3.00', 'upper' => '3.59', 'class' => 'Second Class Upper Division', 'short' => 'Second Class - UD'],
+                ['lower' => '2.50', 'upper' => '2.99', 'class' => 'Second Class Lower Division', 'short' => 'Second Class - LD'],
+                ['lower' => '2.25', 'upper' => '2.49', 'class' => 'Third Class', 'short' => 'Third Class'],
+                ['lower' => '2.00', 'upper' => '2.24', 'class' => 'Pass', 'short' => 'Pass'],
+            ]);
+        $data['applications'] = ApplicationForm::whereNotNull('matric')->orderBy('name')->get()->each(function($rec) use($data, $gpa_classes){
+            if($rec->previous_training != null){
+                $training = collect(json_decode($rec->previous_training))->first();
+                // dd($training);
+            }
             $rec->department = $data['structure']->where('program_id', $rec->program)->first()['department']??'';
+            $rec->certificate = $training?->certificate??'';
+            $rec->school = $training?->school??'';
+            $rec->gpa = $gpa_classes->where('lower', '<=', $training?->gpa??'')->where('upper', '>=', $training?->gpa??'')->first()['class']??'';
         });
         if($request->action){
             $fname = 'admisison_report'.time().'.csv';
             $handler = fopen(public_path('uploads/'.$fname), 'w');
-            $headings = ['NAME', 'GENDER', 'REGISTRAtION NUMBER', 'DEPARTMENT', 'PLACE OF BIRHT', 'NATIONALITY'];
+            $headings = ['NAME', 'GENDER', 'REGISTRAtION NUMBER', 'DEPARTMENT', 'PLACE OF BIRHT', 'NATIONALITY', 'ENTRY CERTIFICATE', 'INSTITUTION', 'GRADE', 'HIMS DECISION', 'DECISION OF UBa-HIMS JOINED ADMISSION BOARD'];
             fputcsv($handler, $headings);
             foreach($data['applications'] as $appl){
-                fputcsv($handler, [$appl->name, $appl->gender, $appl->matric, $appl->department, ($appl->dob?->format('Y-m-d')??'').' | '.$appl->pob, $appl->nationality]);
+                fputcsv($handler, [
+                    $appl->name, 
+                    $appl->gender, 
+                    $appl->matric, 
+                    $appl->department, 
+                    ($appl->dob?->format('Y-m-d')??'').' | '.$appl->pob, 
+                    $appl->nationality,
+                    $appl->certificate,
+                    $appl->school,
+                    $appl->gpa,
+                    'Favourable',
+                    'Admitted'
+                ]);
             }
             fclose($handler);
 

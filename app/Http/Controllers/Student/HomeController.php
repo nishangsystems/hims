@@ -229,8 +229,8 @@ class HomeController extends Controller
             // $data['aux_programs'] = \App\Models\Program::where('type', 'auxiliary')->get();
             $data['degrees'] = collect(json_decode($this->api_service->degrees())->data);
             $data['degree'] = $application->degree_id == null ? null : $data['degrees']->where('id', $application->degree_id)->first();
-            if($data['degree'] != null && (strstr($data['degree']->deg_name, "MBA") || strstr($data['degree']->deg_name, 'master'))){
-                $data['is_master'] = 1;
+            if($data['degree'] != null && (in_array($application->degree_id, [6, 3]))){
+                $data['alternate'] = 1;
             }
             $data['title'] = (isset($data['degree']) and ($data['degree'] != null)) ? $data['degree']->deg_name." APPLICATION" : "APPLICATION";
             // dd($data);
