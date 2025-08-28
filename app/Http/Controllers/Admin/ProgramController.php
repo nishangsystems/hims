@@ -250,11 +250,64 @@ class ProgramController extends Controller
             return back()->with('error', $validity->errors()->first());
         }
 
-        $data = ['name'=>$request->name, 'program'=>$request->program];
         $application = ApplicationForm::find($id);
+        $data = $request->all();
+
+        if($request->gce_ol_record)
+        $data['gce_ol_record'] = json_encode(array_values($request->gce_ol_record));
+        if($request->gce_al_record)
+        $data['gce_al_record'] = json_encode(array_values($request->gce_al_record));
+
+        if($request->previous_trainings != null){
+            $data_p1=[];
+            $_data = $request->previous_training;
+            // return $_data;
+            if($_data != null){
+                foreach ($_data as $key => $value) {
+                    $data_p1[] = ['school'=>$value['school'], 'year'=>$value['year'], 'course'=>$value['course'], 'certificate'=>$value['certificate']];
+                }
+                $data['previous_training'] = json_encode($data_p1);
+                // return $data;
+            }
+            $data_p2 = [];
+            $e_data = $request->employments;
+            if($e_data != null){
+                foreach ($e_data as $key => $value) {
+                    $data_p2[] = ['employer'=>$value['employer'], 'post'=>$value['post'], 'start'=>$value['start'], 'end'=>$value['end'], 'type'=>$value['type']];
+                }
+                $data['employments'] = json_encode($data_p2);
+                // return $data;
+            }
+        }
+
+        if($request->program != null){
+            $levels = collect(json_decode($this->api_service->campusProgramLevels($application->campus_id, $request->program))->data);
+            // dd($levels);
+            $data['level'] = $levels->first()?->level??'';
+        }
+        $data = collect($data)->filter(function($value, $key){return $key != '_token';})->toArray();
+
         $application->update($data);
         if($application->admitted == 1){
-            $this->api_service->update_student($application->matric, ['name'=>$request->name,]);
+            $update = [
+                'name'=>$application->name??null, 
+                'email'=>$application->email??null, 
+                'phone'=>$application->phone??null,
+                'address'=>$application->residence??null, 
+                'gender'=>$application->gender??null,
+                'dob'=>$application->dob??null, 
+                'pob'=>$application->pob??null,
+                'year_id'=>$application->year_id??null,
+                'campus_id'=>$application->campus_id??null, 
+                'admission_batch_id'=>$application->year_id??null,
+                'fee_payer_name'=>$application->fee_payer_name??null, 
+                'program_first_choice'=>$application->program??null, 
+                'region'=>$application->_region->name??null,
+                'fee_payer_tel'=>$application->fee_payer_tel??null, 
+                'division'=>$application->_division->name??null,
+                'level'=>$application->level??null
+            ];
+            $this->api_service->update_student($application->matric, $update);
         }
         return back()->with('success', __('text.word_done'));
     }

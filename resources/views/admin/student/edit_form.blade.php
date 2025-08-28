@@ -20,7 +20,7 @@
                         <div class="py-2 col-sm-6 col-md-4 col-lg-4">
                             <label class="text-secondary  text-capitalize">{{ __('text.date_of_birth_bilang') }}</label>
                             <div class="">
-                                <input type="date" class="form-control text-primary"  name="dob" value="{{ $application->dob }}" required>
+                                <input type="date" class="form-control text-primary"  name="dob" value="{{ $application->dob->format('Y-m-d') }}" required>
                             </div>
                         </div>
                         <div class="py-2 col-sm-6 col-md-4 col-lg-3">
@@ -105,104 +105,7 @@
                         </div>
                         <div class="py-2 col-sm-6 col-md-4 col-lg-3" id="specify_source"></div>
                     </div>
-                    <div class="py-2 row bg-light border-top shadow">
-                        <h4 class="py-3 border-bottom border-top bg-white text-primary my-4 text-uppercase col-sm-12 col-md-12 col-lg-12" style="font-weight:800;">{{ __('text.word_stage') }} 1: {{ __('text.personal_details') }} : <span class="text-danger">APPLYING FOR A/AN {{ $degree->name??null }} PROGRAM</span></h4>
-                        <div class="py-2 col-sm-6 col-md-4 col-lg-5">
-                            <label class="text-secondary  text-capitalize">{{ __('text.word_name_bilang') }}</label>
-                            <div class="">
-                                <input type="text" class="form-control text-primary"  name="name" value="{{ $application->name??'' }}" required>
-                            </div>
-                        </div>
-                        <div class="py-2 col-sm-6 col-md-4 col-lg-4">
-                            <label class="text-secondary  text-capitalize">{{ __('text.date_of_birth_bilang') }}</label>
-                            <div class="">
-                                <input type="date" class="form-control text-primary"  name="dob" value="{{ $application->dob }}" required>
-                            </div>
-                        </div>
-                        <div class="py-2 col-sm-6 col-md-4 col-lg-3">
-                            <label class="text-secondary  text-capitalize">{{ __('text.place_of_birth_bilang') }}</label>
-                            <div class="">
-                                <input type="text" class="form-control text-primary"  name="pob" value="{{ $application->pob }}" required>
-                            </div>
-                        </div>
-                        <div class="py-2 col-sm-6 col-md-4 col-lg-3">
-                            <label class="text-secondary  text-capitalize">{{ __('text.word_gender_bilang') }}</label>
-                            <div class="">
-                                <select class="form-control text-primary"  name="gender" required>
-                                    <option value="male" {{ $application->gender == 'male' ? 'selected' : '' }}>{{ __('text.word_male') }}</option>
-                                    <option value="female" {{ $application->gender == 'female' ? 'selected' : '' }}>{{ __('text.word_female') }}</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="py-2 col-sm-6 col-md-4 col-lg-3">
-                            <label class="text-secondary  text-capitalize">{{ __('text.ID_card_number') }}</label>
-                            <div class="">
-                                <input type="text" class="form-control text-primary"  name="id_card_number" value="{{ $application->id_card_number }}" required>
-                            </div>
-                        </div>
-                        <div class="py-2 col-sm-6 col-md-4 col-lg-3">
-                            <label class="text-secondary  text-capitalize">{{ __('text.date_of_issue') }}</label>
-                            <div class="">
-                                <input type="date" class="form-control text-primary"  name="id_date_of_issue" value="{{ $application->id_date_of_issue }}" required>
-                            </div>
-                        </div>
-                        <div class="py-2 col-sm-6 col-md-4 col-lg-3">
-                            <label class="text-secondary  text-capitalize">{{ __('text.place_of_issue') }}</label>
-                            <div class="">
-                                <input type="text" class="form-control text-primary"  name="id_place_of_issue" value="{{ $application->id_place_of_issue }}" required>
-                            </div>
-                        </div>
-                        <div class="py-2 col-sm-6 col-md-4 col-lg-3">
-                            <label class="text-secondary  text-capitalize">{{ __('text.word_nationality') }}</label>
-                            <div class="">
-                                <select class="form-control text-primary"  name="nationality" required>
-                                    <option></option>
-                                    @foreach(config('all_countries.list') as $key=>$value)
-                                        <option value="{{ $value['name'] }}" {{ $application->nationality== $value['name'] ? 'selected' : ($value['name'] == 'Cameroon' ? 'selected' : '') }}>{{ $value['name']}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                        <div class="py-2 col-sm-6 col-md-4 col-lg-3">
-                            <label class="text-secondary  text-capitalize">{{ __('text.region_of_origin') }}</label>
-                            <div class="">
-                                <select class="form-control text-primary"  name="region" required oninput="loadDivisions(event)">
-                                    <option value=""></option>
-                                    @foreach(\App\Models\Region::all() as $value)
-                                        <option value="{{ $value->id }}" {{ $application->region == $value->id ? 'selected' : '' }}>{{ $value->region }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                        <div class="py-2 col-sm-6 col-md-4 col-lg-3">
-                            <label class="text-secondary  text-capitalize">{{ __('text.country_of_birth') }}</label>
-                            <div class="">
-                                <select class="form-control text-primary"  name="country_of_birth" required>
-                                    <option></option>
-                                    @foreach(config('all_countries.list') as $key=>$value)
-                                        <option value="{{ $value['name'] }}" {{ $application->country_of_birth == $value['name'] ? 'selected' : ($value['name'] == 'Cameroon' ? 'selected' : '') }}>{{ $value['name']}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                        <div class="py-2 col-sm-6 col-md-4 col-lg-3">
-                            <label class="text-secondary  text-capitalize">{{ __('text.where_did_you_hear_about_us') }}</label>
-                            <div class="">
-                                <select class="form-control text-primary"  name="referer" required onchange="specify_source(event)">
-                                    <option value=""></option>
-                                    <option value="POSTER OR NEWS PAPER" {{ $application->referer== 'POSTER OR NEWS PAPER' ? 'selected' : '' }}>POSTER OR NEWS PAPER</option>
-                                    <option value="FLYER OR BANNER" {{ $application->referer== 'FLYER OR BANNER' ? 'selected' : '' }}>FLYER OR BANNER</option>
-                                    <option value="STUDENT OR EX-STUDENT" {{ $application->referer== 'STUDENT OR EX-STUDENT' ? 'selected' : '' }}>STUDENT OR EX-STUDENT</option>
-                                    <option value="STAFF" {{ $application->referer== 'STAFF' ? 'selected' : '' }}>STAFF</option>
-                                    <option value="INTERNET OR ADVERTISEMENT" {{ $application->referer== 'INTERNET OR ADVERTISEMENT' ? 'selected' : '' }}>INTERNET OR ADVERTISEMENT</option>
-                                    <option value="OTHERS" {{ $application->referer== 'OTHERS' ? 'selected' : '' }}  >OTHERS</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="py-2 col-sm-6 col-md-4 col-lg-3" id="specify_source"></div>
-                    </div>
-
-
+                    
                 <!-- STAGE 2 -->
                     <div class="py-2 row bg-light border-top shadow">
                         <h4 class="py-3 border-bottom border-top bg-white text-primary my-4 text-uppercase col-sm-12 col-md-12 col-lg-12" style="font-weight:800;">{{ __('text.word_stage') }} 2: {{ __('text.address_details') }} : <span class="text-danger">APPLYING FOR A/AN {{ $degree->name ?? null }} PROGRAM</span></h4>
@@ -435,7 +338,7 @@
                             </table>
                         </div>
                     </div>    
-                    @if (isset($alternate))
+                    @if ($application->alternate())
                         <div class="py-2 row bg-light border-top shadow">
                             <h4 class="py-3 border-bottom border-top bg-white text-primary my-4 text-uppercase col-sm-12 col-md-12 col-lg-12" style="font-weight:800;"> @if ($application->degree_id == 6)  {{ __('text.bachelors_degree_bilang') }} @else  HND Result @endif </h4>
                             <div class="col-sm-12 col-md-12 col-lg-12 py-2">
