@@ -305,8 +305,8 @@
                                                     <option value="C" {{ $result->grade == 'C' ? 'selected' : '' }}>C</option>
                                                 </select>
                                             </td>
-                                            <td class="border"><input class="form-control text-primary"  name="gce_ol_record[{{ $ol_key }}][coef]" required value="{{ $result->coef??'' }}"></td>
-                                            <td class="border"><input class="form-control text-primary"  name="gce_ol_record[{{ $ol_key }}][nc]" required value="{{ $result->nc??'' }}"></td>
+                                            <td class="border"><input class="form-control text-primary"  name="gce_ol_record[{{ $ol_key }}][coef]" value="{{ $result->coef??'' }}"></td>
+                                            <td class="border"><input class="form-control text-primary"  name="gce_ol_record[{{ $ol_key }}][nc]" value="{{ $result->nc??'' }}"></td>
                                         </tr>
                                     @endforeach
                                 </tbody>
@@ -372,7 +372,7 @@
                                         @endphp
                                         <tr class="text-capitalize">
                                             <td class="border"><span class="btn btn-sm px-4 py-1 btn-danger rounded" onclick="dropAlResult(event)">{{ __('text.word_drop') }}</span></td>
-                                            <td class="border"><input class="form-control text-primary"  name="gce_al_record[{{ $al_key }}][subject]" required value="{{ $record->subject }}"></td>
+                                            <td class="border"><input class="form-control text-primary"  name="gce_al_record[{{ $al_key }}][subject]" value="{{ $record->subject }}"></td>
                                             <td class="border">
                                                 <select class="form-control text-primary input imput-sm"  name="gce_al_record[{{ $al_key }}][grade]">
                                                     <option value=""></option>
@@ -383,8 +383,8 @@
                                                     <option value="E" {{ $record->grade == 'E' ? 'selected' : '' }}>E</option>
                                                 </select>
                                             </td>
-                                            <td class="border"><input class="form-control text-primary"  name="gce_al_record[{{ $al_key }}][coef]" required value="{{ $record->coef??'' }}"></td>
-                                            <td class="border"><input class="form-control text-primary"  name="gce_al_record[{{ $al_key }}][nc]" required value="{{ $record->nc??'' }}"></td>
+                                            <td class="border"><input class="form-control text-primary"  name="gce_al_record[{{ $al_key }}][coef]" value="{{ $record->coef??'' }}"></td>
+                                            <td class="border"><input class="form-control text-primary"  name="gce_al_record[{{ $al_key }}][nc]" value="{{ $record->nc??'' }}"></td>
                                         </tr>
                                     @endforeach
                                 </tbody>
@@ -795,6 +795,7 @@
                                             <th class="text-center border">{{ __('text.word_year') }}</th>
                                             <th class="text-center border">{{ __('text.word_course') }}</th>
                                             <th class="text-center border">{{ __('text.word_certificate') }}</th>
+                                            <th class="text-center border">{{ __('text.word_grade') }}</th>
                                         <tr>
                                     </thead>
                                     <tbody id="previous_trainings">
@@ -804,6 +805,7 @@
                                                 <td class="border"><label class="form-control text-primary border-0">{{ $rec->year }}</label></td>
                                                 <td class="border"><label class="form-control text-primary border-0">{{ $rec->course }}</label></td>
                                                 <td class="border"><label class="form-control text-primary border-0">{{ $rec->certificate }}</label></td>
+                                                <td class="border"><label class="form-control text-primary border-0">{{ $rec->gpa }}</label></td>
                                             </tr>
                                         @endforeach
                                     </tbody>
@@ -932,7 +934,7 @@
                             <td><span class="btn btn-sm px-4 py-1 btn-danger rounded" onclick="dropAlResult(event)">{{ __('text.word_drop') }}</span></td>
                             <td><input class="form-control text-primary"  name="gce_al_record[${key}][subject]" required value="" placeholder="SUBJECT"></td>
                             <td>
-                                <select class="form-control text-primary"  name="gce_al_record[${key}][grade]" required>
+                                <select class="form-control text-primary"  name="gce_al_record[${key}][grade]">
                                     <option value=""></option>
                                     <option value="A">A</option>
                                     <option value="B">B</option>
@@ -941,8 +943,8 @@
                                     <option value="E">E</option>
                                 </select>
                             </td>
-                            <td><input class="form-control text-primary"  name="gce_al_record[${key}][coef]" required value="" placeholder="COEF"></td>
-                            <td><input class="form-control text-primary"  name="gce_al_record[${key}][nc]" required value="" placeholder="NOTE*COEF"></td>
+                            <td><input class="form-control text-primary"  name="gce_al_record[${key}][coef]" value="" placeholder="COEF"></td>
+                            <td><input class="form-control text-primary"  name="gce_al_record[${key}][nc]" value="" placeholder="NOTE*COEF"></td>
                         </tr>`;
             $('#gce_al_record').append(html);
         } 
@@ -961,15 +963,15 @@
                             <td><span class="btn btn-sm px-4 py-1 btn-danger rounded" onclick="dropOlResult(event)">{{ __('text.word_drop') }}</span></td>
                             <td><input class="form-control text-primary"  name="gce_ol_record[${key}][subject]" required value="" placeholder="SUBJECT"></td>
                             <td>
-                                <select class="form-control text-primary"  name="gce_ol_record[${key}][grade]" required>
+                                <select class="form-control text-primary"  name="gce_ol_record[${key}][grade]">
                                     <option value=""></option>
                                     <option value="A">A</option>
                                     <option value="B">B</option>
                                     <option value="C">C</option>
                                 </select>
                             </td>
-                            <td><input class="form-control text-primary"  name="gce_ol_record[${key}][coef]" required value="" placeholder="COEF"></td>
-                            <td><input class="form-control text-primary"  name="gce_ol_record[${key}][nc]" required value="" placeholder="NOTE * COEF"></td>
+                            <td><input class="form-control text-primary"  name="gce_ol_record[${key}][coef]" value="" placeholder="COEF"></td>
+                            <td><input class="form-control text-primary"  name="gce_ol_record[${key}][nc]" value="" placeholder="NOTE * COEF"></td>
                         </tr>`;
             $('#gce_ol_record').append(html);
         } 

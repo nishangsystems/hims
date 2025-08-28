@@ -22,7 +22,7 @@
                             <td class="border-left border-right">{{ $appl->name == null ? $appl->student->name : $appl->name }}</td>
                             <td class="border-left border-right">{{ $appl->email == null ? $appl->student->email : $appl->email }}</td>
                             <td class="border-left border-right">{{ $appl->phone == null ? $appl->student->phone : $appl->phone }}</td>
-                            <td class="border-left border-right">{{ $appl->degree->name??null }}</td>
+                            <td class="border-left border-right">{{ $degrees->where('id', $appl->degree_id)->first()?->deg_name??null }}</td>
                             <td class="border-left border-right">{{ $programs->where('id', $appl->program)->first()->name??'' }}</td>
                             <td class="border-left border-right">
                                 @if(isset($action))

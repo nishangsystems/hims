@@ -199,6 +199,7 @@ class ProgramController extends Controller
     public function edit_application_form(Request $request, $id = null)
     {
         # code...
+        $data['degrees'] = collect(json_decode($this->api_service->degrees())->data);
         if($id == null){
             $data['title'] = "Edit Student Information";
             $data['_this'] = $this;
@@ -208,11 +209,35 @@ class ProgramController extends Controller
             return view('admin.student.applications', $data);
         }
 
-        # code...
-        $data['programs'] = collect(json_decode($this->api_service->programs())->data);
+        $application = ApplicationForm::find($id);
+        $programs = collect(json_decode($this->api_service->programs())->data);
+        $data['programs'] = $programs;
+        $data['campuses'] = json_decode($this->api_service->campuses())->data;
         $data['application'] = ApplicationForm::find($id);
+        $data['degree'] = collect(json_decode($this->api_service->degrees())->data??[])->where('id', $data['application']->degree_id)->first();
+        $data['campus'] = collect($data['campuses'])->where('id', $data['application']->campus_id)->first();
+        $data['certs'] = json_decode($this->api_service->certificates())->data;
         
-        $data['title'] = "EDIT APPLICATION FORM FOR ".$data['application']->degree->name;
+        $data['department'] = collect(json_decode($this->api_service->school_program_structure())->data)->where('program_id', $application->program)->first();
+        $data['cert'] = collect($data['certs'])->where('id', $data['application']->entry_qualification)->first();
+        $data['program'] = $programs->where('id', $data['application']->program)->first();
+        $data['levels'] = collect(json_decode($this->api_service->levels())->data);
+        $data['certificates'] = collect(json_decode($this->api_service->certificates())->data);
+        
+        
+        $al_records = collect(json_decode($application->gce_al_record));
+        $ol_records = collect(json_decode($application->gce_ol_record));
+        $data['ol_general'] = $ol_records->whereNotNull('grade')->count() > 0 ? 1 : 0;
+        $data['ol_tech'] = $ol_records->whereNotNull('coef')->count() > 0 ? 2 : 0;
+        $data['al_general'] = $al_records->whereNotNull('grade')->count() > 0 ? 1 : 0;
+        $data['al_tech'] = $al_records->whereNotNull('coef')->count() > 0 ? 2 : 0;
+
+        if($application->degree_id == 6){
+            $data['is_master'] = 1;
+        }
+
+        # code...
+        $data['title'] = "EDIT APPLICATION FORM FOR ".$data['degrees']->where('id', $data['application']->degree_id)->first()?->deg_name??'';
         return view('admin.student.edit_form', $data);
         
     }

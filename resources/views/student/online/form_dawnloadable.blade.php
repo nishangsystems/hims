@@ -114,11 +114,15 @@
                     <table>
                         <thead class="text-dark border border-2 border-dark py-3" style="font-weight: 700; font-size: 1.6rem;">
                             <tr>
-                                <th class="border border-2 border-dark text-center text-uppercase" colspan="5">GCE O/L or equivalent</th>
+                                <th class="border border-2 border-dark text-center text-uppercase" colspan="{{ 4 + $ol_general + $ol_tech }}">GCE O/L or equivalent</th>
                             </tr>
                             <tr>
                                 <th class="border-left border-right border-2 border-dark">Subject attempted</th>
-                                <th class="border-left border-right border-2 border-dark">Grade</th>
+                                @if($ol_general > 0) <th class="border-left border-right border-2 border-dark">Grade</th> @endif
+                                @if($ol_tech > 0)
+                                    <th class="border-left border-right border-2 border-dark">Coef</th>
+                                    <th class="border-left border-right border-2 border-dark">Note * Coef</th>
+                                @endif
                                 <th class="border-left border-right w-25 text-center" colspan="3">School where the qualification was earned</th>
                             </tr>
                         </thead>
@@ -128,7 +132,13 @@
                                 @php $k++; @endphp
                                 <tr class="border border-2">
                                     <td class="border border-2 border-dark">{{ $rec->subject }}</td>
-                                    <td class="border border-2 border-dark">{{ $rec->grade }}</td>
+                                    @if($ol_general > 0)
+                                        <td class="border border-2 border-dark">{{ $rec->grade }}</td>
+                                    @endif
+                                    @if($ol_tech > 0)
+                                        <td class="border border-2 border-dark">{{ $rec->coef }}</td>
+                                        <td class="border border-2 border-dark">{{ $rec->nc }}</td>
+                                    @endif
                                     @switch($k)
                                         @case(1)
                                             <td class="border text-center" colspan="3">{{ $application->secondary_school }}</td>
@@ -154,11 +164,15 @@
 
                             @if(json_decode($application->gce_al_record) != null)
                                 <tr>
-                                    <th class="border border-2 border-dark text-center text-uppercase" colspan="5">GCE A/L or equivalent</th>
+                                    <th class="border border-2 border-dark text-center text-uppercase" colspan="{{ 4 + $al_general + $al_tech }}">GCE A/L or equivalent</th>
                                 </tr>
                                 <tr>
                                     <th class="border-left border-right border-2 border-dark">Subject attempted</th>
-                                    <th class="border-left border-right border-2 border-dark">Grade</th>
+                                    @if($al_general > 0) <th class="border-left border-right border-2 border-dark">Grade</th> @endif
+                                    @if($al_tech > 0)
+                                        <th class="border-left border-right border-2 border-dark">Coef</th>
+                                        <th class="border-left border-right border-2 border-dark">Note * Coef</th>
+                                    @endif
                                     <th class="border-left border-right w-25 text-center" colspan="3">School where the qualification was earned</th>
                                 </tr>
                                 @php $k = 0; @endphp
@@ -166,7 +180,13 @@
                                     @php $k++; @endphp
                                     <tr class="border border-2">
                                         <td class="border border-2 border-dark">{{ $rec->subject }}</td>
-                                        <td class="border border-2 border-dark">{{ $rec->grade }}</td>
+                                        @if($ol_general > 0)
+                                            <td class="border border-2 border-dark">{{ $rec->grade }}</td>
+                                        @endif
+                                        @if($ol_tech > 0)
+                                            <td class="border border-2 border-dark">{{ $rec->coef }}</td>
+                                            <td class="border border-2 border-dark">{{ $rec->nc }}</td>
+                                        @endif
                                         @switch($k)
                                             @case(1)
                                                 <td class="border text-center" colspan="3">{{ $application->high_school }}</td>

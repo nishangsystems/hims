@@ -80,6 +80,13 @@ class AppService{
             $title = __('text.inst_tapplication_form', ['degree'=>$data['degree']->deg_name]);
             $data['title'] = $title;
 
+            $al_records = collect(json_decode($application->gce_al_record));
+            $ol_records = collect(json_decode($application->gce_ol_record));
+            $data['ol_general'] = $ol_records->whereNotNull('grade')->count() > 0 ? 1 : 0;
+            $data['ol_tech'] = $ol_records->whereNotNull('coef')->count() > 0 ? 2 : 0;
+            $data['al_general'] = $al_records->whereNotNull('grade')->count() > 0 ? 1 : 0;
+            $data['al_tech'] = $al_records->whereNotNull('coef')->count() > 0 ? 2 : 0;
+
             if($application->degree_id == 6){
                 $data['is_master'] = 1;
             }
