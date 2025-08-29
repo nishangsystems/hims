@@ -189,6 +189,58 @@ class HomeController extends Controller
         return view('student.online.programs', $data);
     }
 
+    public function start_application_backup (Request $request, $step, $application_id = null)
+    {
+        try {
+
+            if(auth('student')->user()->applicationForms()->whereNotNull('transaction_id')->where('submitted', true)->where('year_id', Helpers::instance()->getCurrentAccademicYear())->count() > 0){
+                return redirect(route('student.home'))->with('error', "You are allowed to submit only one application form per year");
+            }
+
+            // check if application is open now
+            if(!(Helpers::instance()->application_open())){
+                return redirect(route('student.home'))->with('error', 'Application closed for '.Batch::find(Config::all()->last()->year_id)->name);
+            }
+            # code...
+            $data['step'] = $step;
+            // return $this->api_service->campuses();
+            $application = ApplicationForm::where(['student_id'=>auth('student')->id(), 'year_id'=>Helpers::instance()->getCurrentAccademicYear()])->first();
+            if($application == null){
+                $application = new ApplicationForm();
+                $application->student_id = auth('student')->id();
+                $application->year_id = Helpers::instance()->getCurrentAccademicYear();
+                // $application->id = 5;
+                $application->save();
+            }
+            // $application->update(['campus_id'=>1]);
+            // if($application->degree_id != null and ($application->tranzak_transaction == null || $application->tranzak_transaction->payment_id != $application->degree_id) and $step != 0 ){
+            //     $data['step'] = 6;
+            // }else
+            if($application->degree_id != null and ($application->tranzak_transaction != null and $application->tranzak_transaction->payment_id == $application->degree_id) and $step == 6){
+                return redirect()->route('student.home')->with('error', "Payment has been made for this application instance");
+            }
+            $data['certificates'] = collect(json_decode($this->api_service->certificates())->data);
+            $data['application'] = $application;
+            if($application->entry_qualification != null){
+                // dd($application);
+                // dd($this->api_service->campusDegreeCertificatePrograms($application->campus_id, $application->degree_id, $application->entry_qualification));
+                $data['programs'] = collect(json_decode($this->api_service->campusDegreeCertificatePrograms($application->campus_id, $application->degree_id, $application->entry_qualification))->data??[]);
+            }
+            // $data['aux_programs'] = \App\Models\Program::where('type', 'auxiliary')->get();
+            $data['degrees'] = collect(json_decode($this->api_service->degrees())->data);
+            $data['degree'] = $application->degree_id == null ? null : $data['degrees']->where('id', $application->degree_id)->first();
+            if($data['degree'] != null && (in_array($application->degree_id, [6, 3]))){
+                $data['alternate'] = 1;
+            }
+            $data['title'] = (isset($data['degree']) and ($data['degree'] != null)) ? $data['degree']->deg_name." APPLICATION" : "APPLICATION";
+            // dd($data);
+            return view('student.online.fill_form', $data);
+        } catch (\Throwable $th) {
+            //throw $th;
+            return back()->with('error', $th->getMessage());
+        }
+    }
+
     public function start_application (Request $request, $step, $application_id = null)
     {
         try {
@@ -241,7 +293,7 @@ class HomeController extends Controller
         }
     }
 
-    public function persist_application(Request $request, $step, $application_id)
+    public function persist_application_backup(Request $request, $step, $application_id)
     {
         # code...
         // return $request->all();
@@ -449,6 +501,220 @@ class HomeController extends Controller
             }
         }
         
+        return redirect(route('student.application.start', [$step, $application_id]));
+    }
+
+    public function persist_application(Request $request, $step, $application_id)
+    {
+        # code...
+        // return $request->all();
+        
+        // check if application is open now
+        if(!(Helpers::instance()->application_open())){
+            return redirect(route('student.home'))->with('error', 'Application closed for '.Batch::find(Config::all()->last()->year_id)->name);
+        }
+        switch ($step) {
+            case 1:
+                # code...
+                $validity = Validator::make($request->all(), [
+                    'degree_id'=>'required'
+                ]);
+                break;
+            
+            case 2:
+                # code...
+                // return $request->all();
+                $validity = Validator::make($request->all(), [
+                    // "name"=>'required', "dob"=>'required|date', "pob"=>'required',
+                    // "gender"=>'required', "id_card_number"=>'required', 
+                    // "id_date_of_issue"=>'required|date', "id_place_of_issue"=>'required', 
+                    // "nationality"=>'required', "region"=>'required', 
+                    // "country_of_birth"=>'required', "referer"=>'required'
+                ]);
+                break;
+            
+            case 3:
+                # code...
+                $validity = Validator::make($request->all(), [
+                    "residence"=>'required', "phone"=>'required',  "guardian"=>'required', "guardian_phone"=>'required', 
+                    "guardian_address"=>'required', "sponsor"=>'required', "sponsor_phone"=>'required', "sponsor_address"=>'required'
+                ]);
+                break;
+            
+            case 4:
+                # code...
+                
+                $validity = Validator::make($request->all(), [
+                    // "high_school"=>'string', 
+                    // "high_school_exam_center"=>,
+                    // "high_school_candidate_number"=>'required', 
+                    // "high_school_exam_year"=>'required', 
+                    // "gce_al_record"=>'required'
+                    "secondary_school"=>'nullable', "secondary_exam_center"=>'nullable', "secondary_candidate_number"=>'nullable', "secondary_exam_year"=>'nullable', "gce_ol_record"=>'array',
+                    'previous_training'=>'array', 'employments'=>'array'
+                ]);
+                break;
+                
+            case 5:
+                # code...
+                $validity = Validator::make($request->all(), [
+                    'program'=>'required'
+                ]);
+                break;
+            case 6:
+                # code...
+                $validity = Validator::make($request->all(), []);
+                break;
+
+            case 7:
+                $validity = Validator::make($request->all(), ['momo_number'=>'required', 'amount'=>'required']);
+                # code...
+                break;
+            
+        }
+
+        if($validity->fails()){
+            return back()->with('error', $validity->errors()->first());
+        }
+        // return $request->all();
+        $application = \App\Models\ApplicationForm::find($application_id);
+        if($application->degree_id != null and ($application->tranzak_transaction != null and $application->tranzak_transaction->payment_id == $application->degree_id) and $step == 7){
+            return redirect()->route('student.home')->with('error', "Payment has been made for this application instance");
+        }
+
+        // persist data
+        $data = $request->all();
+        if($step == 4){
+            // dd($request->collect());
+
+            if($request->gce_ol_record)
+            $data['gce_ol_record'] = json_encode(array_values($request->gce_ol_record));
+            if($request->gce_al_record)
+            $data['gce_al_record'] = json_encode(array_values($request->gce_al_record));
+
+            if($request->previous_trainings != null){
+                $data_p1=[];
+                $_data = $request->previous_training;
+                // return $_data;
+                if($_data != null){
+                    foreach ($_data as $key => $value) {
+                        $data_p1[] = ['school'=>$value['school'], 'year'=>$value['year'], 'course'=>$value['course'], 'certificate'=>$value['certificate']];
+                    }
+                    $data['previous_training'] = json_encode($data_p1);
+                    // return $data;
+                }
+                $data_p2 = [];
+                $e_data = $request->employments;
+                if($e_data != null){
+                    foreach ($e_data as $key => $value) {
+                        $data_p2[] = ['employer'=>$value['employer'], 'post'=>$value['post'], 'start'=>$value['start'], 'end'=>$value['end'], 'type'=>$value['type']];
+                    }
+                    $data['employments'] = json_encode($data_p2);
+                    // return $data;
+                }
+            }
+            $data = collect($data)->filter(function($value, $key){return $key != '_token';})->toArray();
+            $application = ApplicationForm::updateOrInsert(['id'=> $application_id, 'student_id'=>auth('student')->id()], $data);
+        }elseif($step == 7){
+            // dd($request->all());
+            $tk_counter = 0;
+            $application = auth('student')->user()->applicationForms()->where('year_id', Helpers::instance()->getCurrentAccademicYear())->first();
+            if($application->degree_id == null){ goto SKIP;}
+            $tranzak_credentials = TranzakCredential::where('campus_id', $application->campus_id)->first();
+            if(cache($tranzak_credentials->cache_token_key) == null or Carbon::parse(cache($tranzak_credentials->cache_token_expiry_key))->isAfter(now())){
+                // get and cache different token
+                // dd($request->all());
+                REQUEST_TOKEN:
+                $tk_counter++;
+                $response = Http::post(config('tranzak.base').config('tranzak.token'), ['appId'=>$tranzak_credentials->app_id, 'appKey'=>$tranzak_credentials->api_key]);
+                if($response->status() == 200){
+                    // return json_decode($response->body())->data;
+                    // return Carbon::createFromTimestamp(time() + json_decode($response->body())->data->expiresIn);
+                    // cache token and token expiration to session
+                    cache([$tranzak_credentials->cache_token_key => json_decode($response->body())->data->token]);
+                    cache([$tranzak_credentials->cache_token_expiry_key=>Carbon::createFromTimestamp(time() + json_decode($response->body())->data->expiresIn)]);
+                }
+            }
+            $headers = ['Authorization'=>'Bearer '.cache($tranzak_credentials->cache_token_key)];
+            // dd($headers);
+            if($request->channel == 'bank'){
+                // $return_url = "192.168.2.196/NISHANG/ssp2_univ_apl_port/api/tranzak/web_redirect/return_callback";
+                // $request_data = ['mchTransactionRef'=>'_apl_fee_'.time().'_'.random_int(1, 9999), "amount"=> $request->amount, "currencyCode"=> "XAF", "description"=>"Payment for application fee into HIMS UNIVERSITY INSTITUTE", 'returnUrl'=>$return_url, 'cancelUrl'=>$return_url];
+                $request_data = ['mchTransactionRef'=>'_apl_fee_'.time().'_'.random_int(1, 9999), "amount"=> $request->amount, "currencyCode"=> "XAF", "description"=>"Payment for application fee into HIMS UNIVERSITY INSTITUTE", 'returnUrl'=>route('tranzak.return_url'), 'cancelUrl'=>route('tranzak.return_url')];
+                $_response = Http::withHeaders($headers)->post(config('tranzak.base').config('tranzak.web_redirect_payment'), $request_data);
+                if($_response->status() == 200){
+                    \Illuminate\Support\Facades\Log::info("_____________REQUEST_TO_PAY___".json_encode($_response->collect()->toArray())."______________.");
+                    
+                    session()->put('processing_tranzak_transaction_details', json_encode(json_decode($_response->body())->data));
+                    session()->put('tranzak_credentials', json_encode($tranzak_credentials));
+                    $applxn = ApplicationForm::find($application_id);
+                    $data = ['student_id'=>auth('student')->id(), 'form_id'=>$application_id, 'requestId'=>$_response->collect()['data']['requestId'], 'payment_id'=>$applxn->degree_id??null, 'year_id'=>$applxn->year_id, 'campus_id'=>$applxn->campus_id, 'purpose'=>'APPLICATION', 'transaction'=>json_encode($_response->collect()['data'])];
+                    \App\Models\PendingTranzakTransaction::create($data);
+                    $payment_url = $_response->collect()['data']['links']['paymentAuthUrl'];
+                    return redirect()->to(route('student.application.payment.processing', $application_id)."?payment_url=".$payment_url);
+                }
+            }else{
+                $request_data = ['mobileWalletNumber'=>str_replace('+', '', strlen($request->momo_number) == 9 ? '237'.$request->momo_number : $request->momo_number), 'mchTransactionRef'=>'_apl_fee_'.time().'_'.random_int(1, 9999), "amount"=> $request->amount, "currencyCode"=> "XAF", "description"=>"Payment for application fee into HIMS"];
+                $_response = Http::withHeaders($headers)->post(config('tranzak.base').config('tranzak.direct_payment_request'), $request_data);
+                // dd($_response->collect());
+                if($_response->status() == 200){
+                    
+                    // $_data = $_response->collect();
+                    // dd($_data);
+                    session()->put('processing_tranzak_transaction_details', json_encode(json_decode($_response->body())->data));
+                    session()->put('tranzak_credentials', json_encode($tranzak_credentials));
+                    // create pending transaction
+                    $applxn = ApplicationForm::find($application_id);
+                    $data = [
+                        'student_id'=>auth('student')->id(), 
+                        'form_id'=>$application_id, 
+                        'requestId'=>$_response->collect()['data']['requestId'], 
+                        'payment_id'=>$applxn->degree_id??null, 
+                        'year_id'=>$applxn->year_id, 
+                        'campus_id'=>$applxn->campus_id, 
+                        'purpose'=>'APPLICATION', 
+                        'transaction'=>json_encode($_response->collect()['data'])
+                    ];
+                    \App\Models\PendingTranzakTransaction::create($data);
+                    return redirect()->to(route('student.application.payment.processing', $application_id));
+                }
+                // dd($_response->collect());
+                if(count($_response->collect()['data']) == 0 and $tk_counter == 0){
+                    goto REQUEST_TOKEN;
+                }
+            }
+
+        }else{
+            // $data = $request->all();
+            if($request->program != null){
+                $levels = collect(json_decode($this->api_service->campusProgramLevels($application->campus_id, $request->program))->data);
+                // dd($levels);
+                $data['level'] = $levels->first()?->level??'';
+            }
+            $data = collect($data)->filter(function($value, $key){return $key != '_token';})->toArray();
+            $application = ApplicationForm::updateOrInsert(['id'=> $application_id, 'student_id'=>auth('student')->id()], $data);
+        }
+        
+        SKIP:
+
+        $step = $request->step;
+
+        $application = \App\Models\ApplicationForm::find($application_id);
+        if($step == 6){
+            if($application->degree_id != null and ($application->tranzak_transaction != null and $application->tranzak_transaction->payment_id == $application->degree_id)){
+                $application->update(['submitted'=>true]);
+                $batch = Batch::find(Helpers::instance()->getCurrentAccademicYear())->name;
+                $school_name = \App\Models\School::first()->name??'';
+                $message = "Hello ".(auth('student')->user()->name??'').", You have successfully submitted application into ".$school_name." for the ".$batch." academic year. Your application is under processing.";
+                $this->sendSmsNotificaition($message, [auth('student')->user()->phone]);
+                
+                return redirect(route("student.home"))->with('success', "Application completed successfully");
+            }
+        }
+        
+        if($step == 2){
+            return redirect(route('student.application.start', [6, $application_id]));
+        }
         return redirect(route('student.application.start', [$step, $application_id]));
     }
 

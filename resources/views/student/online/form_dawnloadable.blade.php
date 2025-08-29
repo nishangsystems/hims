@@ -86,7 +86,7 @@
             <div class="text-capitalize py-1 mx-1 my-2 px-3 rounded border" style="width: 28%; display: inline-block;"><span class="text-secondary" style="font-weight: 700;">date of issue<span> : <span class="text-dark" style="font-weight: 700;">{{ $application->id_date_of_issue }}<span></div>
             <div class="text-capitalize py-1 mx-1 my-2 px-3 rounded border" style="width: 28%; display: inline-block;"><span class="text-secondary" style="font-weight: 700;">place of issue<span> : <span class="text-dark" style="font-weight: 700;">{{ $application->id_place_of_issue }}<span></div>
             <div class="text-capitalize py-1 mx-1 my-2 px-3 rounded border" style="width: 29%; display: inline-block;"><span class="text-secondary" style="font-weight: 700;">Nationality<span> : <span class="text-dark" style="font-weight: 700;">{{ $application->nationality }}<span></div>
-            <div class="text-capitalize py-1 mx-1 my-2 px-3 rounded border" style="width: 28%; display: inline-block;"><span class="text-secondary" style="font-weight: 700;">region of origin<span> : <span class="text-dark" style="font-weight: 700;">{{ $application->_region->region }}<span></div>
+            <div class="text-capitalize py-1 mx-1 my-2 px-3 rounded border" style="width: 28%; display: inline-block;"><span class="text-secondary" style="font-weight: 700;">region of origin<span> : <span class="text-dark" style="font-weight: 700;">{{ $application->_region?->region??'' }}<span></div>
             <div class="text-capitalize py-1 mx-1 my-2 px-3 rounded border" style="width: 28%; display: inline-block;"><span class="text-secondary" style="font-weight: 700;">country of birth<span> : <span class="text-dark" style="font-weight: 700;">{{ $application->country_of_birth }}<span></div>
         </div> 
     </div>
@@ -128,39 +128,41 @@
                         </thead>
                         <tbody style="font-size: 1.3rem">
                             @php $k = 0; @endphp
-                            @foreach (json_decode($application->gce_ol_record) as $rec)
-                                @php $k++; @endphp
-                                <tr class="border border-2">
-                                    <td class="border border-2 border-dark">{{ $rec->subject }}</td>
-                                    @if($ol_general > 0)
-                                        <td class="border border-2 border-dark">{{ $rec->grade }}</td>
-                                    @endif
-                                    @if($ol_tech > 0)
-                                        <td class="border border-2 border-dark">{{ $rec->coef }}</td>
-                                        <td class="border border-2 border-dark">{{ $rec->nc }}</td>
-                                    @endif
-                                    @switch($k)
-                                        @case(1)
-                                            <td class="border text-center" colspan="3">{{ $application->secondary_school }}</td>
-                                            @break
-                                        @case(2)
-                                            <th class="border-left border-right">Exam Center</th>
-                                            <th class="border-left border-right">Candidate No</th>
-                                            <th class="border-left border-right">Year</th>
-                                            @break
-                                        @case(3)
-                                            <td class="border">{{ $application->secondary_exam_center }}</td>
-                                            <td class="border">{{ $application->secondary_candidate_number }}</td>
-                                            <td class="border">{{ $application->secondary_exam_year }}</td>
-                                            @break
-                                        @default
-                                            <td class="border"></td>
-                                            <td class="border"></td>
-                                            <td class="border"></td>
-                                            @break;
-                                    @endswitch
-                                </tr>
-                            @endforeach
+                            @if(json_decode($application->gce_ol_record) != null)
+                                @foreach (json_decode($application->gce_ol_record) as $rec)
+                                    @php $k++; @endphp
+                                    <tr class="border border-2">
+                                        <td class="border border-2 border-dark">{{ $rec->subject }}</td>
+                                        @if($ol_general > 0)
+                                            <td class="border border-2 border-dark">{{ $rec->grade }}</td>
+                                        @endif
+                                        @if($ol_tech > 0)
+                                            <td class="border border-2 border-dark">{{ $rec->coef }}</td>
+                                            <td class="border border-2 border-dark">{{ $rec->nc }}</td>
+                                        @endif
+                                        @switch($k)
+                                            @case(1)
+                                                <td class="border text-center" colspan="3">{{ $application->secondary_school }}</td>
+                                                @break
+                                            @case(2)
+                                                <th class="border-left border-right">Exam Center</th>
+                                                <th class="border-left border-right">Candidate No</th>
+                                                <th class="border-left border-right">Year</th>
+                                                @break
+                                            @case(3)
+                                                <td class="border">{{ $application->secondary_exam_center }}</td>
+                                                <td class="border">{{ $application->secondary_candidate_number }}</td>
+                                                <td class="border">{{ $application->secondary_exam_year }}</td>
+                                                @break
+                                            @default
+                                                <td class="border"></td>
+                                                <td class="border"></td>
+                                                <td class="border"></td>
+                                                @break;
+                                        @endswitch
+                                    </tr>
+                                @endforeach
+                            @endif
 
                             @if(json_decode($application->gce_al_record) != null)
                                 <tr>
@@ -213,29 +215,31 @@
                         </tbody>
                     </table>
                     @if ($application->alternate())
-                        <table>
-                            <thead class="text-dark border border-2 border-dark py-3" style="font-weight: 700; font-size: 1.6rem;">
-                                <tr>
-                                    <th class="border border-2 border-dark text-center text-uppercase" colspan="5">@if($application->degree_id == 6) @lang('text.bachelors_degree_bilang') @else HND Result @endif</th>
-                                </tr>
-                                <tr>
-                                    <th class="border-left border-right w-25 text-capitalize">Year</th>
-                                    <th class="border-left border-right border-2 border-dark">Institution</th>
-                                    <th class="border-left border-right border-2 border-dark">Specialty</th>
-                                    <th class="border-left border-right border-2 border-dark">GPA/Average</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (json_decode($application->previous_training) as $key => $training)
+                        @if(json_decode($application->previous_training) != null)
+                            <table>
+                                <thead class="text-dark border border-2 border-dark py-3" style="font-weight: 700; font-size: 1.6rem;">
                                     <tr>
-                                        <th class="border-left border-right w-25 text-capitalize">{{ $training->year??'' }}</th>
-                                        <th class="border-left border-right w-25 text-capitalize">{{ $training->school??'' }}</th>
-                                        <th class="border-left border-right w-25 text-capitalize">{{ $training->course??'' }}</th>
-                                        <th class="border-left border-right w-25 text-capitalize">{{ $training->gpa??'' }}</th>
+                                        <th class="border border-2 border-dark text-center text-uppercase" colspan="5">@if($application->degree_id == 6) @lang('text.bachelors_degree_bilang') @else HND Result @endif</th>
                                     </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+                                    <tr>
+                                        <th class="border-left border-right w-25 text-capitalize">Year</th>
+                                        <th class="border-left border-right border-2 border-dark">Institution</th>
+                                        <th class="border-left border-right border-2 border-dark">Specialty</th>
+                                        <th class="border-left border-right border-2 border-dark">GPA/Average</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (json_decode($application->previous_training) as $key => $training)
+                                        <tr>
+                                            <th class="border-left border-right w-25 text-capitalize">{{ $training->year??'' }}</th>
+                                            <th class="border-left border-right w-25 text-capitalize">{{ $training->school??'' }}</th>
+                                            <th class="border-left border-right w-25 text-capitalize">{{ $training->course??'' }}</th>
+                                            <th class="border-left border-right w-25 text-capitalize">{{ $training->gpa??'' }}</th>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        @endif
                         @if($application->employments != null)
                             <h4 class="text-uppercase py-1 w-100" style="font-weight: 700;">@lang('text.employment_history_bilang')</h4>
                             <table>

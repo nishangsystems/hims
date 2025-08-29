@@ -1021,5 +1021,6 @@ return [
     'word_institution'=>'institution',
     'hims_decision'=>'HIMS decision',
     'registration_number'=>'registration number',
+    'basic_information'=>'basic information',
     ''
 ];
