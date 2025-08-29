@@ -47,7 +47,7 @@
                         <div class="py-2 col-sm-6 col-md-4 col-lg-3">
                             <label class="text-secondary  text-capitalize">{{ __('text.date_of_issue') }}</label>
                             <div class="">
-                                <input type="date" class="form-control text-primary"  name="id_date_of_issue" value="{{ $application->id_date_of_issue }}" required>
+                                <input type="date" class="form-control text-primary"  name="id_date_of_issue" value="{{ $application->id_date_of_issue?->format('Y-m-d') }}" required>
                             </div>
                         </div>
                         <div class="py-2 col-sm-6 col-md-4 col-lg-3">

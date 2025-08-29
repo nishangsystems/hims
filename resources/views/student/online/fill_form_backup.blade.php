@@ -11,21 +11,12 @@
                     @csrf
                     <div class="px-5 py-5 border-top shadow bg-light">
                         <div class="row w-100">
-                            <div class="col-sm-12 col-md-5">
-                                <label class="text-capitalize"><span style="font-weight: 700;">{{ __('text.word_degree') }}</span> <i class="text-danger">*</i> </label>
-                                <select name="degree_id" class="form-control text-primary" required>
-                                    <option></option>
+                            <div class="col-sm-12 col-md-9">
+                                <label class="text-capitalize"><span style="font-weight: 700;">{{ __('text.word_degree') }}</span></label>
+                                <select name="degree_id" class="form-control text-primary"  oninput="setDegreeTypes(event)" required>
+                                    <option>{{ __('text.word_degree') }}</option>
                                     @foreach ($degrees as $degree)
                                         <option value="{{ $degree->id }}" {{ $application->degree_id == $degree->id ? 'selected' : '' }}>{{ $degree->deg_name }}</option>  
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="col-sm-12 col-md-4">
-                                <label class="text-capitalize"><span style="font-weight: 700;">{{ __('text.entry_qualification') }}</span> <i class="text-danger">*</i> </label>
-                                <select name="entry_qualification" class="form-control text-primary" required>
-                                    <option></option>
-                                    @foreach ($certificates as $cert)
-                                        <option value="{{ $cert->id }}" {{ $application->entry_qualification == $cert->id ? 'selected' : '' }}>{{ $cert->certi }}</option>  
                                     @endforeach
                                 </select>
                             </div>
@@ -52,94 +43,28 @@
                 @break
 
             @case(1)
-                <form enctype="multipart/form-data" id="application_form" method="post" action="{{ route('student.application.start', [2, $application->id]) }}" class="d-flex justify-content-center">
+                <form enctype="multipart/form-data" id="application_form" method="post" action="{{ route('student.application.start', [2, $application->id]) }}">
                     @csrf
-                    <div class="py-4 row shadow col-md-9 col-xl-8" style="border: 5px groove gray; border-radius: 0.5rem; margin: 2rem auto;">
-                        <h4 class="py-3 border-bottom  bg-white text-primary my-4 text-uppercase col-sm-12 col-md-12 col-lg-12 text-center" style="font-weight:800;"> Higher institute of Management Studies <br> HIMS - BUEA <br><br> application Form </h4>
-                        
-                        <div class="col-12">
+                    <div class="py-2 row bg-light border-top shadow">
+                        <h4 class="py-3 border-bottom border-top bg-white text-primary my-4 text-uppercase col-sm-12 col-md-12 col-lg-12" style="font-weight:800;">{{ __('text.word_stage') }} 1: {{ __('text.personal_details') }} : <span class="text-danger">APPLYING FOR A/AN {{ $degree->name??null }} PROGRAM</span></h4>
+                        <div class="py-2 col-sm-6 col-md-4 col-lg-5">
+                            <label class="text-secondary  text-capitalize">{{ __('text.word_name_bilang') }}</label>
                             <div class="">
-                                <select class="form-control text-capitalize text-primary" name="program" required onchange="loadCpLevels(event)">
-                                    <option></option>
-                                    @foreach($programs as $program)
-                                        <option value="{{ $program->id }}" {{ old('program', $application->program) == $program->id ? 'selected' : '' }}>{{ $program->name }}</option>
-                                    @endforeach
-                                </select>
+                                <input type="text" class="form-control text-primary"  name="name" value="{{ auth('student')->user()->name }}" readonly required>
                             </div>
-                            <label class="text-secondary  text-capitalize">{{ __('text.word_program') }}</label>
                         </div>
-
-                        <input type="hidden" name="level" id="level_field">
-                        
-                        <div class="py-2 col-sm-12 col-lg-8">
+                        <div class="py-2 col-sm-6 col-md-4 col-lg-4">
+                            <label class="text-secondary  text-capitalize">{{ __('text.date_of_birth_bilang') }}</label>
                             <div class="">
-                                <input type="text" class="form-control text-primary"  name="name" value="{{ auth('student')->user()->name }}" required>
+                                <input type="date" class="form-control text-primary"  name="dob" value="{{ $application->dob }}" required>
                             </div>
-                            <label class="text-secondary  text-capitalize">Full Name</label>
                         </div>
-                        <div class="py-2 col-sm-12 col-lg-4">
-                            <div class="">
-                                <input type="date" class="form-control text-primary"  name="dob" value="{{ $application->dob?->format('Y-m-d')??'' }}" required>
-                            </div>
-                            <label class="text-secondary  text-capitalize">Date of Birth</label>
-                        </div>
-                        <div class="py-2 col-sm-12 col-lg-8">
+                        <div class="py-2 col-sm-6 col-md-4 col-lg-3">
+                            <label class="text-secondary  text-capitalize">{{ __('text.place_of_birth_bilang') }}</label>
                             <div class="">
                                 <input type="text" class="form-control text-primary"  name="pob" value="{{ $application->pob }}" required>
                             </div>
-                            <label class="text-secondary  text-capitalize">Place of Birth</label>
                         </div>
-                        <div class="py-2 col-sm-12 col-lg-4">
-                            <div class="">
-                                <input type="tel" class="form-control text-primary"  name="phone" value="{{ auth('student')->user()->phone }}" required>
-                            </div>
-                            <label class="text-secondary  text-capitalize">Contact Number</label>
-                        </div>
-                        <div class="py-2 col-sm-12 col-lg-8">
-                            <div class="">
-                                <input type="tel" class="form-control text-primary"  name="sponsor" value="{{ $application->sponsor }}" required>
-                            </div>
-                            <label class="text-secondary  text-capitalize">Father's Name</label>
-                        </div>
-                        <div class="py-2 col-sm-12 col-lg-4">
-                            <div class="">
-                                <input type="tel" class="form-control text-primary"  name="sponsor_phone" value="{{ $application->sponsor_phone }}" required>
-                            </div>
-                            <label class="text-secondary  text-capitalize">Father's Contact</label>
-                        </div>
-                        <div class="py-2 col-sm-12 col-lg-8">
-                            <div class="">
-                                <input type="tel" class="form-control text-primary"  name="guardian" value="{{ $application->guardian }}" required>
-                            </div>
-                            <label class="text-secondary  text-capitalize">Mother's Name</label>
-                        </div>
-                        <div class="py-2 col-sm-12 col-lg-4">
-                            <div class="">
-                                <input type="tel" class="form-control text-primary"  name="guardian_phone" value="{{ $application->guardian_phone }}" required>
-                            </div>
-                            <label class="text-secondary  text-capitalize">Mother's Contact</label>
-                        </div>
-                        <div class="py-2 col-12">
-                            <div class="">
-                                <input type="text" class="form-control text-primary"  name="residence" value="{{ $application->residence }}" required>
-                            </div>
-                            <label class="text-secondary  text-capitalize">Residential Address</label>
-                        </div>
-                        
-                        <div class="py-2 col-sm-6 col-md-4 col-lg-3" id="specify_source"></div>
-                        <div class="col-sm-12 col-md-12 col-lg-12 py-4 d-flex justify-content-center">
-                            <a href="{{ route('student.application.start', [$step-1, $application->id]) }}" class="px-4 py-1 btn btn-lg btn-danger">{{ __('text.word_back') }}</a>
-                            <input type="submit" class="px-4 py-1 btn btn-lg btn-primary" value="{{ __('text.save_and_continue') }}">
-                        </div>
-                    </div>
-                </form>
-                @break
-        
-            @case(2)
-                <form enctype="multipart/form-data" id="application_form" method="post" action="{{ route('student.application.start', [ 3, $application->id]) }}">
-                    @csrf
-                    <div class="py-2 row bg-light border-top shadow">
-                        <h4 class="py-3 border-bottom border-top bg-white text-primary my-4 text-uppercase col-sm-12 col-md-12 col-lg-12" style="font-weight:800;">{{ __('text.word_stage') }} 2: {{ __('text.address_details') }} : <span class="text-danger">APPLYING FOR A/AN {{ $degree->name ?? null }} PROGRAM</span></h4>
                         <div class="py-2 col-sm-6 col-md-4 col-lg-3">
                             <label class="text-secondary  text-capitalize">{{ __('text.word_gender_bilang') }}</label>
                             <div class="">
@@ -212,6 +137,32 @@
                                     <option value="INTERNET OR ADVERTISEMENT" {{ $application->referer== 'INTERNET OR ADVERTISEMENT' ? 'selected' : '' }}>INTERNET OR ADVERTISEMENT</option>
                                     <option value="OTHERS" {{ $application->referer== 'OTHERS' ? 'selected' : '' }}  >OTHERS</option>
                                 </select>
+                            </div>
+                        </div>
+                        <div class="py-2 col-sm-6 col-md-4 col-lg-3" id="specify_source"></div>
+                        <div class="col-sm-12 col-md-12 col-lg-12 py-4 d-flex justify-content-center">
+                            <a href="{{ route('student.application.start', [$step-1, $application->id]) }}" class="px-4 py-1 btn btn-lg btn-danger">{{ __('text.word_back') }}</a>
+                            <input type="submit" class="px-4 py-1 btn btn-lg btn-primary" value="{{ __('text.save_and_continue') }}">
+                        </div>
+                    </div>
+                </form>
+                @break
+        
+            @case(2)
+                <form enctype="multipart/form-data" id="application_form" method="post" action="{{ route('student.application.start', [ 3, $application->id]) }}">
+                    @csrf
+                    <div class="py-2 row bg-light border-top shadow">
+                        <h4 class="py-3 border-bottom border-top bg-white text-primary my-4 text-uppercase col-sm-12 col-md-12 col-lg-12" style="font-weight:800;">{{ __('text.word_stage') }} 2: {{ __('text.address_details') }} : <span class="text-danger">APPLYING FOR A/AN {{ $degree->name ?? null }} PROGRAM</span></h4>
+                        <div class="py-2 col-sm-6 col-md-4 col-lg-4">
+                            <label class="text-secondary  text-capitalize">{{ __('text.word_residence_bilang') }}</label>
+                            <div class="">
+                                <input type="text" class="form-control text-primary"  name="residence" value="{{ $application->residence }}" required>
+                            </div>
+                        </div>
+                        <div class="py-2 col-sm-6 col-md-4 col-lg-4">
+                            <label class="text-secondary  text-capitalize">{{ __('text.telephone_number_bilang') }}</label>
+                            <div class="">
+                                <input type="tel" class="form-control text-primary"  name="phone" value="{{ auth('student')->user()->phone }}" readonly required>
                             </div>
                         </div>
                         <div class="py-2 col-sm-6 col-md-4 col-lg-4">
@@ -566,6 +517,19 @@
                             </div>
                         </div>
                         
+                        <div class="col-sm-12 col-md-6 col-lg-6">
+                            <label class="text-secondary  text-capitalize">{{ __('text.word_program') }}</label>
+                            <div class="">
+                                <select class="form-control text-capitalize text-primary" name="program" required onchange="loadCpLevels(event)">
+                                    <option></option>
+                                    @foreach($programs as $program)
+                                        <option value="{{ $program->id }}" {{ old('program', $application->program) == $program->id ? 'selected' : '' }}>{{ $program->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+
+                        <input type="hidden" name="level" id="level_field">
                         
                         <div class="col-sm-12 col-md-12 col-lg-12 py-4 d-flex justify-content-center">
                             <a href="{{ route('student.application.start', [$step-1, $application->id]) }}" class="px-4 py-1 btn btn-lg btn-danger">{{ __('text.word_back') }}</a>
