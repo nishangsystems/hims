@@ -139,6 +139,7 @@ class ProgramController extends Controller
         # code...
         $data['title'] = "All Application Forms";
         $data['_this'] = $this;
+        $data['degrees'] = collect(json_decode($this->api_service->degrees())->data);
         $data['applications'] = ApplicationForm::whereNotNull('transaction_id')->where('submitted', 1)->get();
         return view('admin.student.applications', $data);
     }
@@ -184,6 +185,7 @@ class ProgramController extends Controller
             $data['title'] = "Print Student Application Form";
             $data['_this'] = $this;
             $data['action'] = __('text.word_print');
+            $data['degrees'] = collect(json_decode($this->api_service->degrees())->data);
             $data['programs'] = collect(json_decode($this->api_service->programs())->data);
             $data['applications'] = ApplicationForm::whereNotNull('transaction_id')->where('submitted', 1)->get();
             return view('admin.student.applications', $data);
@@ -204,6 +206,7 @@ class ProgramController extends Controller
             $data['title'] = "Edit Student Information";
             $data['_this'] = $this;
             $data['action'] = __('text.word_edit');
+            $data['degrees'] = collect(json_decode($this->api_service->degrees())->data);
             $data['programs'] = collect(json_decode($this->api_service->programs())->data);
             $data['applications'] = ApplicationForm::whereNotNull('transaction_id')->where(['year_id'=> Helpers::instance()->getCurrentAccademicYear(), 'submitted'=>1])->get();
             return view('admin.student.applications', $data);
@@ -321,6 +324,7 @@ class ProgramController extends Controller
             $data['action'] = __('text.word_show');
             // $data['bypass'] = 'bypass form';
             $data['programs'] = collect(json_decode($this->api_service->programs())->data);
+            $data['degrees'] = collect(json_decode($this->api_service->degrees())->data);
             $data['applications'] = ApplicationForm::whereNull('transaction_id')->where('year_id', Helpers::instance()->getCurrentAccademicYear())->get();
             // return $data;
             return view('admin.student.applications', $data);
@@ -347,6 +351,7 @@ class ProgramController extends Controller
             $data['_this'] = $this;
             $data['action'] = __('text.word_print');
             $data['programs'] = collect(json_decode($this->api_service->programs())->data);
+            $data['degrees'] = collect(json_decode($this->api_service->degrees())->data);
             $data['applications'] = ApplicationForm::whereNotNull('transaction_id')->where('admitted', 1)->where('year_id', Helpers::instance()->getCurrentAccademicYear())->get();
             return view('admin.student.applications', $data);
         }
@@ -377,6 +382,7 @@ class ProgramController extends Controller
             $data['title'] = "Admit Student";
             $data['_this'] = $this;
             $data['action'] = __('text.word_admit');
+            $data['degrees'] = collect(json_decode($this->api_service->degrees())->data);
             $data['applications'] = ApplicationForm::whereNotNull('transaction_id')->where('submitted', 1)->where('admitted', 0)->where('year_id', Helpers::instance()->getCurrentAccademicYear())->get();
             $data['programs'] = collect(json_decode($this->api_service->programs())->data);
             return view('admin.student.applications', $data);
@@ -501,6 +507,7 @@ class ProgramController extends Controller
             $data['title'] = "Change Student Program";
             $data['_this'] = $this;
             $data['action'] = __('text.change_program');
+            $data['degrees'] = collect(json_decode($this->api_service->degrees())->data);
             $data['programs'] = collect(json_decode($this->api_service->programs())->data);
             $data['applications'] = ApplicationForm::where('admitted', true)->where('year_id', Helpers::instance()->getCurrentAccademicYear())->get();
             return view('admin.student.applications', $data);
@@ -617,6 +624,7 @@ class ProgramController extends Controller
         
 
         $application = ApplicationForm::find($id);
+        $data['degrees'] = collect(json_decode($this->api_service->degrees())->data);
         $application->update(['transaction_id'=>-1000000000, 'submitted'=>1]);
         return redirect(route('admin.applications.uncompleted'))->with('success', __('text.word_done'));
     }
@@ -751,11 +759,7 @@ class ProgramController extends Controller
 
     public function admission_report(Request $request){
         $data['title'] = "Admission Report For ".Batch::find(Helpers::instance()->getCurrentAccademicYear())?->name??'';
-        // $data['programs'] = collect(json_decode($this->api_service->programs())->data);
-        // $data['degrees'] = collect(json_decode($this->api_service->degrees())->data);
-        // $data['certificates'] = collect(json_decode($this->api_service->certificates())->data);
         $data['structure'] = collect($this->api_service->school_program_structure()->get('data'));
-        // dd($data['structure']->where('program_id', 76)->first()['department']);
         $gpa_classes = collect([
                 ['lower' => '3.60', 'upper' => '4.00', 'class' => 'First Class', 'short' => 'First Class'],
                 ['lower' => '3.00', 'upper' => '3.59', 'class' => 'Second Class Upper Division', 'short' => 'Second Class - UD'],
@@ -766,7 +770,6 @@ class ProgramController extends Controller
         $data['applications'] = ApplicationForm::whereNotNull('matric')->orderBy('name')->get()->each(function($rec) use($data, $gpa_classes){
             if($rec->previous_training != null){
                 $training = collect(json_decode($rec->previous_training))->first();
-                // dd($training);
             }
             $rec->department = $data['structure']->where('program_id', $rec->program)->first()['department']??'';
             $rec->certificate = $training?->certificate??'';
