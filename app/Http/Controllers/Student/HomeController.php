@@ -817,8 +817,11 @@ class HomeController extends Controller
             return redirect(route('student.home'))->with('error', 'Application closed for '.Batch::find(Helpers::instance()->getYear())->name);
         }
         $applications = auth('student')->user()->currentApplicationForms()->where('submitted', 0)->get();
+        $programs = collect(json_decode($this->api_service->programs())->data);
         $data['title'] = "Submit Application";
         $data['applications'] = $applications;
+        $data['programs'] = $programs;
+        // dd($data);
         return view('student.online.submit_form', $data);
     }
 
