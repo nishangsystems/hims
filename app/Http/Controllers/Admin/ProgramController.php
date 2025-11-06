@@ -325,7 +325,7 @@ class ProgramController extends Controller
             $data['action'] = __('text.word_show');
             // $data['bypass'] = 'bypass form';
             $data['programs'] = collect(json_decode($this->api_service->programs())->data);
-            $data['applications'] = ApplicationForm::whereNull('transaction_id')->where('year_id', Helpers::instance()->getCurrentAccademicYear())->get();\
+            $data['applications'] = ApplicationForm::whereNull('transaction_id')->where('year_id', Helpers::instance()->getCurrentAccademicYear())->get();
 
             // return $data;
             return view('admin.student.applications', $data);
