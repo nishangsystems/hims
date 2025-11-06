@@ -16,6 +16,10 @@
                     <input class="form-control" name="end_date" required type="datetime-local" value="{{ $current_session != null ? $current_session->end_date : null }}">
                     <label class="text-secondary text-capitalize">{{ __('text.end_date') }}</label>
                 </div>
+                <div class="col-sm-12 col-md-4 col-lg-3 py-2">
+                    <input class="form-control" name="start_of_lectures" required type="date" value="{{ $current_session != null ? $current_session->start_of_lectures?->format('Y-m-d') : null }}">
+                    <label class="text-secondary text-capitalize">{{ __('text.start_of_lectures') }}</label>
+                </div>
                 {{-- <div class="col-sm-12 col-md-4 col-lg-3 py-2">
                     <input class="form-control" name="fee1_latest_date" required type="datetime-local" value="{{ $current_session != null ? $current_session->fee1_latest_date : null }}">
                     <label class="text-secondary text-capitalize">{{ __('text.first_instalment_latest_date') }}</label>

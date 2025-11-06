@@ -1022,5 +1022,6 @@ return [
     'hims_decision'=>'HIMS decision',
     'registration_number'=>'registration number',
     'basic_information'=>'basic information',
+    'start_of_lectures'=>'start of lectures',
     ''
 ];

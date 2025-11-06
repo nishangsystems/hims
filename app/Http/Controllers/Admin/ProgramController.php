@@ -44,11 +44,11 @@ class ProgramController extends Controller
     public function set_open_admission(Request $request)
     {
         # code...
-        $validity = Validator::make($request->all(), ['start_date'=>'required|date', 'end_date'=>'required|date']);
+        $validity = Validator::make($request->all(), ['start_date'=>'required|date', 'end_date'=>'required|date', 'start_of_lectures'=>'required|date']);
         if($validity->fails()){return back()->with('error', $validity->errors()->first());}
 
         // return $request->all();
-        $config = ['start_date'=>$request->start_date, 'end_date'=>$request->end_date];
+        $config = ['start_date'=>$request->start_date, 'end_date'=>$request->end_date, 'start_of_lectures'=>$request->start_of_lectures];
         Config::updateOrInsert(['year_id'=>Helpers::instance()->getCurrentAccademicYear()], $config);
         return back()->with('success', __('text.word_done'));
     }
