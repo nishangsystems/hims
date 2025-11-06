@@ -318,23 +318,25 @@ class ProgramController extends Controller
     public function uncompleted_application_form(Request $request, $id=null)
     {
         # code...
+        $data['degrees'] = collect(json_decode($this->api_service->degrees())->data);
         if($id == null){
             $data['title'] = "Uncompleted Application Forms";
             $data['_this'] = $this;
             $data['action'] = __('text.word_show');
             // $data['bypass'] = 'bypass form';
             $data['programs'] = collect(json_decode($this->api_service->programs())->data);
-            $data['degrees'] = collect(json_decode($this->api_service->degrees())->data);
-            $data['applications'] = ApplicationForm::whereNull('transaction_id')->where('year_id', Helpers::instance()->getCurrentAccademicYear())->get();
+            $data['applications'] = ApplicationForm::whereNull('transaction_id')->where('year_id', Helpers::instance()->getCurrentAccademicYear())->get();\
+
             // return $data;
             return view('admin.student.applications', $data);
         }
-
+        
         // return $this->api_service->campuses();
         $data['application'] = ApplicationForm::find($id);
+        $data['degree'] = $data['degrees']->where('id', $data['degrees']->where('id', $data['application']->degree_id))?->first();
 
 
-        $data['title'] = "INCOMPLETE APPLICATION FORM FOR ".$data['application']->degree->name??'';
+        $data['title'] = "INCOMPLETE APPLICATION FORM FOR ".$data['degree']?->deg_name??'';
         return view('admin.student.show_form', $data);
     }
 
