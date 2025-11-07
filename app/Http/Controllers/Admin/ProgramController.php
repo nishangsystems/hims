@@ -371,7 +371,8 @@ class ProgramController extends Controller
         
         // $data['campus'] = collect(json_decode($this->api_service->campuses())->data)->where('id', $appl->campus_id)->first();
         $data['program'] = Program::find($appl->program);
-        return view('admin.student.admission_letter', $data);
+        // return view('admin.student.admission_letter', $data);
+        return $this->app_service->admission_letter($id);
         $pdf = Pdf::loadView('admin.student.admission_letter', $data);
 
         return $pdf->download("Admission_Letter_{$appl->matric}.pdf");
