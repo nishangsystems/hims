@@ -161,6 +161,8 @@ class ProgramController extends Controller
             // dd($application);
             // dd($this->api_service->campusDegreeCertificatePrograms($application->campus_id, $application->degree_id, $application->entry_qualification));
             $data['programs'] = collect(json_decode($this->api_service->campusDegreeCertificatePrograms($application->campus_id, $application->degree_id, $application->entry_qualification))->data??[]);
+        }else{
+            $data['programs'] = collect(json_decode($this->api_service->programs())->data);
         }
         // $data['aux_programs'] = \App\Models\Program::where('type', 'auxiliary')->get();
         $data['degrees'] = collect(json_decode($this->api_service->degrees())->data);
