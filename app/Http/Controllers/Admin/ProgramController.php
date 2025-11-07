@@ -133,7 +133,6 @@ class ProgramController extends Controller
         };
     }
 
-
     public function applications()
     {
         # code...
@@ -176,7 +175,6 @@ class ProgramController extends Controller
 
         
     }
-
     
     public function print_application_form(Request $request, $id = null)
     {
@@ -324,6 +322,7 @@ class ProgramController extends Controller
             $data['_this'] = $this;
             $data['action'] = __('text.word_show');
             // $data['bypass'] = 'bypass form';
+            $data['degrees'] = collect(json_decode($this->api_service->degrees())->data);
             $data['programs'] = collect(json_decode($this->api_service->programs())->data);
             $data['applications'] = ApplicationForm::whereNull('transaction_id')->where('year_id', Helpers::instance()->getCurrentAccademicYear())->get();
 
@@ -352,6 +351,7 @@ class ProgramController extends Controller
             $data['title'] = "Download Admission Letter";
             $data['_this'] = $this;
             $data['action'] = __('text.word_print');
+            $data['degrees'] = collect(json_decode($this->api_service->degrees())->data);
             $data['programs'] = collect(json_decode($this->api_service->programs())->data);
             $data['degrees'] = collect(json_decode($this->api_service->degrees())->data);
             $data['applications'] = ApplicationForm::whereNotNull('transaction_id')->where('admitted', 1)->where('year_id', Helpers::instance()->getCurrentAccademicYear())->get();
