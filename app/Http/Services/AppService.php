@@ -23,11 +23,12 @@ class AppService{
         if($appl != null){
             $programs = collect(json_decode($this->api_service->programs())->data);
             $campus = collect(json_decode($this->api_service->campuses())->data)->where('id', $appl->campus_id)->first()??null;
-            $program = $programs->where('id', $appl->program_first_choice)->first()??null;
+            $program = $programs->where('id', $appl->program)->first()??null;
             $degree = collect(json_decode($this->api_service->degrees())->data)->where('id', $appl->degree_id)->first()??null;
             $config = Config::where('year_id', Helpers::instance()->getCurrentAccademicYear())->first();
             $department = collect(json_decode($this->api_service->school_program_structure())->data)->where('program_id', $appl->program)->first();
-            
+
+            $duration = collect(json_decode($this->api_service->campusProgramLevels($appl->campus_id, $appl->program))->data)->count();
            
             // dd($fees);
 
@@ -35,6 +36,7 @@ class AppService{
            
             $data['year'] = substr($appl->year->name, -4);
             $data['_year'] = substr($appl->year->name, 2, 2);
+            $data['duration'] = Helpers::instance()->numToWord($duration);
             // dd($data);
             // $data['title'] = "ADMISSION LETTER";
             $data['name'] = $appl->name;
