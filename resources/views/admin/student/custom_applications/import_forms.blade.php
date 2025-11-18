@@ -10,7 +10,6 @@
                             <th>Name *</th>
                             <th>Sex *</th>
                             <th>Phone *</th>
-                            <th>Whatsapp *</th>
                             <th>Email *</th>
                             <th>Date of birth *</th>
                             <th>Place of birth *</th>
@@ -22,7 +21,6 @@
                                 <td style="border: 1px solid skyblue;">Madingo Firman</td>
                                 <td style="border: 1px solid skyblue;">Female</td>
                                 <td style="border: 1px solid skyblue;">679746598</td>
-                                <td style="border: 1px solid skyblue;">674746708</td>
                                 <td style="border: 1px solid skyblue;">curukianki23@gmail.com</td>
                                 <td style="border: 1px solid skyblue;">22/12/1934</td>
                                 <td style="border: 1px solid skyblue;">Mount Frikna Hospital</td>

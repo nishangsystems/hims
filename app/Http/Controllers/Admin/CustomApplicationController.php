@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\admin;
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\ApplicationForm;
@@ -418,10 +418,9 @@ class CustomApplicationController extends Controller
                             'name' => $row[0],
                             'gender' => $row[1],
                             'phone' => $row[2],
-                            'whatsapp' => $row[3],
-                            'email' => $row[4],
-                            'dob' => $row[5],
-                            'pob' => $row[6],
+                            'email' => $row[3],
+                            'dob' => $row[4],
+                            'pob' => $row[5],
                             'campus_id' => $request->campus_id,
                             'year_id' => $year,
                             'program' => $request->program_id,
@@ -443,7 +442,6 @@ class CustomApplicationController extends Controller
                 // dd($imported);
                 foreach(collect($imported)->filter(function($item){ return !empty($item['name']); }) as $item){
                     if(ApplicationForm::where(['name'=>$item['name'], 'year_id' => $item['year_id']])->count() > 0){
-                        dd($item);
                         $errors .= "Application form with name \"".$item['name']."\" already exist for the current accademic year and is not re-imported.\n";
                         continue;
                     }

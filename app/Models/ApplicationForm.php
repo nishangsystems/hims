@@ -13,7 +13,7 @@ class ApplicationForm extends Model
     protected $fillable = [
         'student_id', 'year_id', 'gender', 'name', 'dob', 'id_card_number', 'id_date_of_issue', 'id_place_of_issue', 'nationality', 'country_of_birth', 'referer', 'pob', 'region', 'residence', 'phone', 'extra_phone', 'email',
         'program', 'guardian', 'guardian_phone', 'guardian_address', 'sponsor', 'sponsor_phone', 'sponsor_address', 'secondary_school', 'secondary_exam_center', 'secondary_candidate_number', 'secondary_exam_year', 'gce_ol_record',
-        'high_school', 'high_school_exam_center', 'high_school_candidate_number', 'high_school_exam_year', 'gce_al_record', 'matric',
+        'high_school', 'high_school_exam_center', 'high_school_candidate_number', 'high_school_exam_year', 'gce_al_record', 'matric', 'level',
         'candidate_declaration', 'parent_declaration', 'degree_id', 'admitted', 'submitted', 'momo_number', 'transaction_id'
     ];
 

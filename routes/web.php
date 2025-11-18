@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AttendanceController;
-use App\Http\Controllers\admin\CustomApplicationController;
+use App\Http\Controllers\Admin\CustomApplicationController;
 use App\Http\Controllers\Admin\HomeController as AdminHomeController;
 use App\Http\Controllers\Admin\ProgramController;
 use App\Http\Controllers\Admin\ResultsAndTranscriptsController;
