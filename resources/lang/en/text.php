@@ -1023,5 +1023,8 @@ return [
     'registration_number'=>'registration number',
     'basic_information'=>'basic information',
     'start_of_lectures'=>'start of lectures',
-    ''
+    'custom_applications'=>'custom applications',
+    'new_applicant'=>'new applicant',
+    'switch_program'=>'switch program',
+    'mass_import'=>'mass import'
 ];

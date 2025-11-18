@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AttendanceController;
+use App\Http\Controllers\admin\CustomApplicationController;
 use App\Http\Controllers\Admin\HomeController as AdminHomeController;
 use App\Http\Controllers\Admin\ProgramController;
 use App\Http\Controllers\Admin\ResultsAndTranscriptsController;
@@ -223,6 +224,22 @@ Route::prefix('admin')->name('admin.')->middleware('isAdmin')->group(function ()
         Route::get('admission_report', [ProgramController::class, 'admission_report'])->name('admission_report');
 
     });
+
+    Route::prefix('custom/applications')->name('custom_applications.')->group(function(){
+        Route::get('', [CustomApplicationController::class, 'index'])->name('index');
+        Route::get('local/create', [CustomApplicationController::class, 'create_local'])->name('local.create');
+        Route::post('local/create', [CustomApplicationController::class, 'store_local']);
+        Route::get('create', [CustomApplicationController::class, 'create'])->name('create');
+        Route::post('create', [CustomApplicationController::class, 'store']);
+        Route::get('switch', [CustomApplicationController::class, 'switch_program'])->name('switch');
+        Route::post('switch', [CustomApplicationController::class, 'switch_generate_matricule']);
+        Route::post('switch_confirmed', [CustomApplicationController::class, 'switch_confirmed'])->name('switch_confirmed');
+        Route::get('importadmit', [CustomApplicationController::class, 'import_admit_students'])->name('import');
+        Route::post('importadmit', [CustomApplicationController::class, 'import_admit_students_save']);
+        Route::get('import', [CustomApplicationController::class, 'import'])->name('mass_import');
+        Route::post('import', [CustomApplicationController::class, 'import_save']);
+    });
+
     Route::prefix('reports')->name('reports.')->group(function(){
         Route::get('degree/{degree?}', [ProgramController::class, 'applicants_report_by_degree'])->name('applicants.by_degree');
         Route::get('program/{program?}', [ProgramController::class, 'applicants_report_by_program'])->name('applicants.by_program');
@@ -239,6 +256,10 @@ Route::prefix('admin')->name('admin.')->middleware('isAdmin')->group(function ()
 
     Route::get('campus/program/levels/{campus_id}/{program_id}', [Controller::class, 'campusProgramLevels'])->name('campus.program.levels');
 });
+
+
+Route::get('degree{degree_id}programs', [Controller::class, 'degree_programs'])->name('degree_programs');
+Route::get('program{program_id}levels', [Controller::class, 'program_levels'])->name('_program_levels');
 
 
 Route::prefix('student')->name('student.')->middleware(['isStudent', 'platform'])->group(function () {
