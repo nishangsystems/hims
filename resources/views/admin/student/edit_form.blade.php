@@ -20,7 +20,7 @@
                         <div class="py-2 col-sm-6 col-md-4 col-lg-4">
                             <label class="text-secondary  text-capitalize">{{ __('text.date_of_birth_bilang') }}</label>
                             <div class="">
-                                <input type="date" class="form-control text-primary"  name="dob" value="{{ $application?->dob?->format('Y-m-d') }}" required>
+                                <input type="date" class="form-control text-primary"  name="dob" value="{{ $application?->dob??null == null ? '' : \Carbon\Carbon::parse($application->dob)->format('Y-m-d')}}" required>
                             </div>
                         </div>
                         <div class="py-2 col-sm-6 col-md-4 col-lg-3">
