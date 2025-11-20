@@ -17,7 +17,7 @@ class ApplicationForm extends Model
         'candidate_declaration', 'parent_declaration', 'degree_id', 'admitted', 'submitted', 'momo_number', 'transaction_id'
     ];
 
-    // protected $dates = ['dob', 'created_at', 'updated_at', 'id_date_of_issue'];
+    protected $dates = ['dob', 'created_at', 'updated_at', 'id_date_of_issue'];
     public function can_submit()
     {
         # code...
