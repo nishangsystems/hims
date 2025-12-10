@@ -9,6 +9,7 @@ use App\Models\Students;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Hash;
+Use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
@@ -419,7 +420,7 @@ class CustomApplicationController extends Controller
                             'gender' => $row[1],
                             'phone' => $row[2],
                             'email' => $row[3],
-                            'dob' => $row[4],
+                            'dob' => Carbon::createFromFormat('d/m/Y', $row[4])?->format('Y-m-d')??null,
                             'pob' => $row[5],
                             'campus_id' => $request->campus_id,
                             'year_id' => $year,
