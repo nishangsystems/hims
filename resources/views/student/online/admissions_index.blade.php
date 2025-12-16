@@ -23,8 +23,9 @@
             let search = $(element).val();
             let route = "{{ route('student_admissions') }}";
             $.ajax({
-                method: 'GET', url: url, data: {"search" : search},
+                method: 'GET', url: route, data: {"search" : search},
                 success: (response)=>{
+                    console.log(response);
                     let dom_node = '';
                     let counter = 1;
                     response.forEach(item => {
