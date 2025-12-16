@@ -313,6 +313,8 @@ Route::middleware('isStudent')->group(function(){
     Route::post('student/tranzak/complete', 'Student\HomeController@tranzak_complete')->name('student.tranzak.complete');
 });
 
+Route::get('admission_list', [HomeController::class, 'list_student_matrics']);
+
 Route::get('section-children/{parent}', 'HomeController@children')->name('section-children');
 Route::get('section-subjects/{parent}', 'HomeController@subjects')->name('section-subjects');
 Route::get('student-search/{name}', 'HomeController@student')->name('student-search');

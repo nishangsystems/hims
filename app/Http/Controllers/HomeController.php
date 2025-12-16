@@ -14,6 +14,7 @@ use App\Http\Resources\SchoolUnitResource;
 use App\Http\Resources\StudentFee;
 use App\Http\Resources\StudentResource;
 use App\Http\Resources\StudentResourceMain;
+use App\Http\Services\ApiService;
 use App\Models\Color;
 use Illuminate\Support\Facades\Auth;
 use Throwable;
@@ -28,6 +29,11 @@ class HomeController extends Controller
         'student_classes.year_id',
     ];
     private $select1 = [];
+    protected $apiService;
+
+    public function __construct(ApiService $apiService){
+        $this->apiService = $apiService;
+    }
     /**
      * Show the application dashboard.
      *
@@ -55,6 +61,7 @@ class HomeController extends Controller
         return \response()->json(StudentFee::collection($students));
     }
 
+
     public function student_get()
     {
         $name = request('name');
@@ -77,6 +84,7 @@ class HomeController extends Controller
         return \response()->json(StudentFee::collection($students));
     }
 
+
     public function searchStudents($name)
     {
         $name = str_replace('/', '\/', $name);
@@ -96,6 +104,7 @@ class HomeController extends Controller
             return $th->getMessage();
         }
     }
+
 
     public function searchStudents_get()
     {
@@ -127,6 +136,7 @@ class HomeController extends Controller
             return $th->getMessage();
         }
     }
+
 
     public function search_students()
     {
@@ -164,6 +174,17 @@ class HomeController extends Controller
         # code...
         $color = Color::where(['name'=>$label])->first();
         return $color == null ? null : $color->value;
+    }
+
+
+    public function list_student_matrics(){
+        $programs = collect(json_decode($this->apiService->programs())->data);
+        $admissions = \App\Models\ApplicationForm::whereNotNull('matric')->where('admitted', 1)->where('year_id', Helpers::instance()->getCurrentAccademicYear())->select(['name', 'phone', 'email', 'matric'])->orderBy('name')->get()
+            ->map(function($item)use($programs){
+                $item->program_name = $programs->where('id', $item->program)->first()?->name??'';
+                return $item;
+            });
+        return view('student.online.admissions_index', ['admissions'=>$admissions]);
     }
     
 }
