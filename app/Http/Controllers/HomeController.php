@@ -29,10 +29,11 @@ class HomeController extends Controller
         'student_classes.year_id',
     ];
     private $select1 = [];
-    protected $apiService;
+    protected $apiService, $programs;
 
     public function __construct(ApiService $apiService){
         $this->apiService = $apiService;
+        $this->programs = collect(json_decode($this->apiService->programs())->data);
     }
     /**
      * Show the application dashboard.
@@ -177,14 +178,20 @@ class HomeController extends Controller
     }
 
 
-    public function list_student_matrics(){
-        $programs = collect(json_decode($this->apiService->programs())->data);
-        $admissions = \App\Models\ApplicationForm::whereNotNull('matric')->where('admitted', 1)->where('year_id', Helpers::instance()->getCurrentAccademicYear())->select(['name', 'phone', 'email', 'matric'])->orderBy('name')->get()
-            ->map(function($item)use($programs){
-                $item->program_name = $programs->where('id', $item->program)->first()?->name??'';
-                return $item;
-            });
-        return view('student.online.admissions_index', ['admissions'=>$admissions]);
+    public function list_student_matrics(Request $request){
+        $search = $request->search;
+        if($search != null){
+            $admissions = \App\Models\ApplicationForm::where(function($query)use($search){
+                    $query->where('phone', 'LIKE', '%'.$search.'%')->orWhere('name', 'LIKE', '%'.$search.'%');
+                })->whereNotNull('matric')->where('admitted', 1)->where('year_id', Helpers::instance()->getCurrentAccademicYear())->select(['name', 'phone', 'email', 'matric'])->orderBy('name')->limit(10)->get()
+                ->each(function($item){
+                    $item->program_name = $this->programs->where('id', $item->program)->first()?->name??'';
+                });
+
+            return response()->json($admissions);
+        }
+        
+        return view('student.online.admissions_index');
     }
     
 }
