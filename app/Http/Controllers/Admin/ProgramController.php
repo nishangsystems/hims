@@ -609,7 +609,7 @@ class ProgramController extends Controller
         
         
         // POST STUDENT TO SCHOOL SYSTEM
-        $resp = json_decode($this->api_service->update_student($application->matric, ['program'=>$application->program_first_choice, 'level'=>$application->level, 'matric'=>$request->matric]))->data??null;
+        $resp = json_decode($this->api_service->update_student($application->matric, ['program'=>$application->program, 'level'=>$application->level, 'matric'=>$request->matric]))->data??null;
         // dd($resp);
         if($resp != null){
             if(is_array($resp) && $resp['status'] ==1){
