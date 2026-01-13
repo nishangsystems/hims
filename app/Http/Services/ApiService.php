@@ -61,11 +61,9 @@ class ApiService{
         return Http::get(Helpers::instance()->getApiRoot().'/'.config('api_routes.programs').'/'.$program_id)->body();
     }
 
-
     public function campusPrograms($campus_id){
         return Http::get(Helpers::instance()->getApiRoot().'/'.config('api_routes.campus_programs').'/'.$campus_id)->body();
     }
-
 
     public function campusProgramsBySchool($campus_id){
         return Http::get(Helpers::instance()->getApiRoot().'/'.config('api_routes.campus_programs_by_school').'/'.$campus_id)->body();
@@ -86,7 +84,7 @@ class ApiService{
     public function max_matric($prefix, $year, $suffix=null)
     {
         # code...
-        return Http::get(Helpers::instance()->getApiRoot().'/'.config('api_routes.max_matric').'/pref/'.$year, ['prefix'=>'\''.$prefix.'\'', 'suffix'=>'\''.$suffix.'\'', 'year'=>$year])->body();
+        return Http::get(Helpers::instance()->getApiRoot().'/'.config('api_routes.max_matric').'/'.$prefix.'/'.$year.'/'.$suffix, ['prefix'=>'\''.$prefix.'\'', 'suffix'=>'\''.$suffix.'\'', 'year'=>$year])->body();
     }
 
     public function matric_exist($matric)
