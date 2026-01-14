@@ -393,7 +393,7 @@ class CustomApplicationController extends Controller
     }
 
     public function import_save(Request $request){
-        $validity = Validator::make($request->all(), ['program_id'=>'required', 'file'=>'required|file|mimetypes:text/csv', 'level'=>'required']);
+        $validity = Validator::make($request->all(), ['program_id'=>'required', 'file'=>'required|file', 'level'=>'required']);
         if($validity->fails()){
             session()->flash('error', $validity->errors()->first());
             return back()->withInput();
