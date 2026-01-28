@@ -3,7 +3,6 @@
     <div class="py-3">
         <form method="post" action="{{ route('admin.applications._change.program', $application->id) }}">
             @csrf
-            <input type="hidden" name="matric" value="{{ $matricule }}">
             <input type="hidden" name="program" value="{{ $program->id }}">
             <input type="hidden" name="level" value="{{ $level }}">
             <div class="col-sm-12 col-md-11 col-lg-9 mx-auto">
@@ -26,7 +25,7 @@
                     </div>
                     <div class="col-sm-12 col-md-6 col-lg-6">
                         <label class="text-secondary text-capitalize">{{ __('text.word_matricule') }}</label>
-                        <div><label class="form-control">{{ $matricule }}</label></div>
+                        <div><input class="form-control" name="matric" value="{{ $matricule }}"></div>
                     </div>
                 </div>
                 <div class="d-flex justify-content-end py-2 text-capitalize">
