@@ -421,6 +421,10 @@ class ProgramController extends Controller
                     $student_matric = $prefix.$year.$suffix.$next_count;
                     // dd($student_matric);
                     if(ApplicationForm::where('matric', $student_matric)->where('id', '!=', $id)->count() == 0){
+                        $matric_exists = json_decode($this->api_service->matric_exist($student_matric))->data;
+                        if($matric_exists == 1){
+                            goto NEXT_MATRIC;
+                        }
                         $data['title'] = "Student Admission";
                         $data['application'] = $application;
                         $data['program'] = $program;
@@ -581,10 +585,16 @@ class ProgramController extends Controller
                 }else{
                     $max_count = intval(substr($max_matric, strlen($prefix)+4));
                 }
+
+                NEXT_MATRIC:
                 $next_count = substr('0000'.($max_count+1), -4);
                 $student_matric = $prefix.$year.$suffix.$next_count;
 
                 if(ApplicationForm::where('matric', $student_matric)->count() == 0){
+                    $matric_exists = json_decode($this->api_service->matric_exist($student_matric))->data;
+                    if($matric_exists == 1){
+                        goto NEXT_MATRIC;
+                    }
                     $data['title'] = "Change Student Program";
                     $data['application'] = $application;
                     $data['program'] = $program;
@@ -592,6 +602,8 @@ class ProgramController extends Controller
                     $data['level'] = $request->level;
                     $data['campus'] = collect(json_decode($this->api_service->campuses())->data)->where('id', $application->campus_id)->first();
                     return view('admin.student.confirm_change_program', $data);
+                }else{
+                    goto NEXT_MATRIC;
                 }
                 return back()->with('error', 'Failed to generate matricule');
             }
