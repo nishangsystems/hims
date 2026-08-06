@@ -1093,10 +1093,8 @@ class HomeController extends Controller
     {
         # code...
         $data['title'] = "Processing Payment Request";
-        $application = auth('student')->user()->applicationForms()->where('year_id', Helpers::instance()->getCurrentAccademicYear())->first();
-        $data['tranzak_credentials'] = TranzakCredential::where('campus_id', $application->campus_id)->first();
+        $data['tranzak_credentials'] = TranzakCredential::where('campus_id', 0)->first();
         $data['transaction'] = json_decode(session('processing_tranzak_transaction_details'));
-        // dd(1573);
         return view('student.momo.processing', $data);
     }
 
