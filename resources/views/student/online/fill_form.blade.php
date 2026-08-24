@@ -66,7 +66,7 @@
                                     @endforeach
                                 </select>
                             </div>
-                            <label class="text-secondary  text-capitalize">{{ __('text.word_program') }}</label>
+                            <label class="text-secondary  text-capitalize">{{ __('text.word_program') }} <span class="text-danger">*</span></label>
                         </div>
 
                         <input type="hidden" name="level" id="level_field">
@@ -75,55 +75,79 @@
                             <div class="">
                                 <input type="text" class="form-control text-primary"  name="name" value="{{ auth('student')->user()->name }}" required>
                             </div>
-                            <label class="text-secondary  text-capitalize">Full Name</label>
+                            <label class="text-secondary  text-capitalize">Full Name<span class="text-danger">*</span></label>
                         </div>
                         <div class="py-2 col-sm-12 col-lg-4">
                             <div class="">
                                 <input type="date" class="form-control text-primary"  name="dob" value="{{ $application->dob?->format('Y-m-d')??'' }}" required>
                             </div>
-                            <label class="text-secondary  text-capitalize">Date of Birth</label>
+                            <label class="text-secondary  text-capitalize">Date of Birth<span class="text-danger">*</span></label>
                         </div>
                         <div class="py-2 col-sm-12 col-lg-8">
                             <div class="">
                                 <input type="text" class="form-control text-primary"  name="pob" value="{{ $application->pob }}" required>
                             </div>
-                            <label class="text-secondary  text-capitalize">Place of Birth</label>
+                            <label class="text-secondary  text-capitalize">Place of Birth<span class="text-danger">*</span></label>
                         </div>
                         <div class="py-2 col-sm-12 col-lg-4">
                             <div class="">
                                 <input type="tel" class="form-control text-primary"  name="phone" value="{{ auth('student')->user()->phone }}" required>
                             </div>
-                            <label class="text-secondary  text-capitalize">Contact Number</label>
+                            <label class="text-secondary  text-capitalize">Contact Number<span class="text-danger">*</span></label>
                         </div>
                         <div class="py-2 col-sm-12 col-lg-8">
                             <div class="">
-                                <input type="tel" class="form-control text-primary"  name="sponsor" value="{{ $application->sponsor }}" required>
+                                <input type="text" class="form-control text-primary"  name="sponsor" value="{{ $application->sponsor }}" required>
                             </div>
-                            <label class="text-secondary  text-capitalize">Father's Name</label>
+                            <label class="text-secondary  text-capitalize">Sponsor's Name<span class="text-danger">*</span></label>
                         </div>
                         <div class="py-2 col-sm-12 col-lg-4">
                             <div class="">
                                 <input type="tel" class="form-control text-primary"  name="sponsor_phone" value="{{ $application->sponsor_phone }}" required>
                             </div>
-                            <label class="text-secondary  text-capitalize">Father's Contact</label>
+                            <label class="text-secondary  text-capitalize">Sponsor's Contact<span class="text-danger">*</span></label>
+                        </div>
+                        <div class="py-2 col-sm-12 col-lg-8">
+                            <div class="">
+                                <input type="text" class="form-control text-primary"  name="father" value="{{ $application->father }}" required>
+                            </div>
+                            <label class="text-secondary  text-capitalize">Father's Name<span class="text-danger">*</span></label>
+                        </div>
+                        <div class="py-2 col-sm-12 col-lg-4">
+                            <div class="">
+                                <input type="tel" class="form-control text-primary"  name="father_phone" value="{{ $application->father_phone }}" required>
+                            </div>
+                            <label class="text-secondary  text-capitalize">Father's Contact<span class="text-danger">*</span></label>
+                        </div>
+                        <div class="py-2 col-sm-12 col-lg-8">
+                            <div class="">
+                                <input type="tel" class="form-control text-primary"  name="mother" value="{{ $application->mother }}" required>
+                            </div>
+                            <label class="text-secondary  text-capitalize">Mother's Name<span class="text-danger">*</span></label>
+                        </div>
+                        <div class="py-2 col-sm-12 col-lg-4">
+                            <div class="">
+                                <input type="tel" class="form-control text-primary"  name="mother_phone" value="{{ $application->mother_phone }}" required>
+                            </div>
+                            <label class="text-secondary  text-capitalize">Mother's Contact<span class="text-danger">*</span></label>
                         </div>
                         <div class="py-2 col-sm-12 col-lg-8">
                             <div class="">
                                 <input type="tel" class="form-control text-primary"  name="guardian" value="{{ $application->guardian }}" required>
                             </div>
-                            <label class="text-secondary  text-capitalize">Mother's Name</label>
+                            <label class="text-secondary  text-capitalize">Guardian's Name<span class="text-danger">*</span></label>
                         </div>
                         <div class="py-2 col-sm-12 col-lg-4">
                             <div class="">
                                 <input type="tel" class="form-control text-primary"  name="guardian_phone" value="{{ $application->guardian_phone }}" required>
                             </div>
-                            <label class="text-secondary  text-capitalize">Mother's Contact</label>
+                            <label class="text-secondary  text-capitalize">Emergency Contact<span class="text-danger">*</span></label>
                         </div>
                         <div class="py-2 col-12">
                             <div class="">
                                 <input type="text" class="form-control text-primary"  name="residence" value="{{ $application->residence }}" required>
                             </div>
-                            <label class="text-secondary  text-capitalize">Residential Address</label>
+                            <label class="text-secondary  text-capitalize">Residential Address<span class="text-danger">*</span></label>
                         </div>
                         
                         <div class="py-2 col-sm-6 col-md-4 col-lg-3" id="specify_source"></div>
