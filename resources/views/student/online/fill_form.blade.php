@@ -107,7 +107,7 @@
                             </div>
                             <label class="text-secondary  text-capitalize">Sponsor's Contact<span class="text-danger">*</span></label>
                         </div>
-                        <div class="py-2 col-sm-12 col-lg-8">
+                        {{-- <div class="py-2 col-sm-12 col-lg-8">
                             <div class="">
                                 <input type="text" class="form-control text-primary"  name="father" value="{{ $application->father }}" required>
                             </div>
@@ -130,7 +130,7 @@
                                 <input type="tel" class="form-control text-primary"  name="mother_phone" value="{{ $application->mother_phone }}" required>
                             </div>
                             <label class="text-secondary  text-capitalize">Mother's Contact<span class="text-danger">*</span></label>
-                        </div>
+                        </div> --}}
                         <div class="py-2 col-sm-12 col-lg-8">
                             <div class="">
                                 <input type="tel" class="form-control text-primary"  name="guardian" value="{{ $application->guardian }}" required>
