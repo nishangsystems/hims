@@ -24,7 +24,9 @@
 
         let programChanged = function(event){
             let program = $(event.target).val();
-            let _url = "{{route('_program_levels', '__PROG_ID__')}}".replace('__PROG_ID__', program);
+            let campus_id = $('select[name="campus_id"]').val();
+            let _url = "{{route('_program_levels', '__PROG_ID__')}}?campus_id=" + campus_id;
+            _url = _url.replace('__PROG_ID__', program);
             $.ajax({
                 method: "GET", url: _url, success: function(response){
                     console.log(response);
@@ -80,7 +82,15 @@
                         <div class="col-lg-6">
                             <h4 class="text-center text-capitalize text-primary"><b>@lang('text.word_program')</b></h4>
                             <hr>
-                            <input type="hidden" name="campus_id" value="8">
+                            <div class="mb-3">
+                                <select name="campus_id" required class="form-control rounded border-top-0 border-left-0 border-right-0 border-bottom " id="">
+                                    <option value=""></option>
+                                    @foreach ($campuses as $campus)
+                                        <option value="{{$campus->id??''}}" {{old('campus_id') == $campus->id ? 'selected' : ''}}>{{$campus->name}}</option>
+                                    @endforeach
+                                </select>
+                                <i class="text-info">@lang('text.word_campus')</i>
+                            </div>
                             <div class="mb-3">
                                 <select name="degree_id" required class="form-control rounded border-top-0 border-left-0 border-right-0 border-bottom " id="" onchange="degreeChanged(event)">
                                     <option value=""></option>

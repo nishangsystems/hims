@@ -296,7 +296,7 @@ class Controller extends BaseController
     }
 
     
-    public function program_levels($program_id){
-        return json_decode($this->api_service->campusProgramLevels(5, $program_id))->data;
+    public function program_levels(Request $request, int $program_id){
+        return json_decode($this->api_service->campusProgramLevels($request->campus_id, $program_id))->data;
     }
 }
