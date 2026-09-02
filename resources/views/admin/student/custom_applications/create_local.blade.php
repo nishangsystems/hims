@@ -101,7 +101,7 @@
                                 <i class="text-info">@lang('text.word_degree')</i>
                             </div>
                             <div class="mb-3">
-                                <select name="program_first_choice" required class="form-control rounded border-top-0 border-left-0 border-right-0 border-bottom " id="program_selection" onchange="programChanged(event)">
+                                <select name="program" required class="form-control rounded border-top-0 border-left-0 border-right-0 border-bottom " id="program_selection" onchange="programChanged(event)">
                                     <option value=""></option>
                                 </select>
                                 <i class="text-info">@lang('text.word_program')</i>
