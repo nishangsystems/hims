@@ -264,7 +264,6 @@ class Controller extends BaseController
         return json_decode($this->api_service->campusDegreeCertificatePrograms($campus_id, $degree_id, $cert_id))->data;
     }
 
-
     public function campusProgramLevels($campus_id, $program_id)
     {
         # code...
@@ -289,5 +288,15 @@ class Controller extends BaseController
         
         return (new FocusTargetSms($phone_number, $message))->send();
 
+    }
+
+    
+    public function degree_programs($degree_id){
+        return collect(json_decode($this->api_service->programs())->data)->where('degree_id', $degree_id)->toArray();
+    }
+
+    
+    public function program_levels($program_id){
+        return json_decode($this->api_service->campusProgramLevels(5, $program_id))->data;
     }
 }
