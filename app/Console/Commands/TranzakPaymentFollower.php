@@ -44,7 +44,7 @@ class TranzakPaymentFollower extends Command
         $tranzak_credentials = \App\Models\TranzakCredential::where('campus_id', 0)->first();
         
         \App\Models\PendingTranzakTransaction::each(function($record)use($tranzak_credentials){
-            if(cache($tranzak_credentials->cache_token_key) == null or now()->parse(cache($tranzak_credentials->cache_token_expiry_key))->isAfter(now())){
+            if(cache($tranzak_credentials->cache_token_key) == null or now()->parse(cache($tranzak_credentials->cache_token_expiry_key))->isPast()){
                 GEN_TOKEN:
                 $response = Http::post(config('tranzak.base').config('tranzak.token'), ['appId'=>$tranzak_credentials->app_id, 'appKey'=>$tranzak_credentials->api_key]);
                 if($response->status() == 200){
@@ -59,7 +59,7 @@ class TranzakPaymentFollower extends Command
                     return;
                 }
     
-                if(cache($tranzak_credentials->cache_token_key) == null or now()->parse(cache($tranzak_credentials->cache_token_expiry_key))->isAfter(now())){goto GEN_TOKEN;}
+                if(cache($tranzak_credentials->cache_token_key) == null or now()->parse(cache($tranzak_credentials->cache_token_expiry_key))->isPast()){goto GEN_TOKEN;}
                 $url = config('tranzak.base').config('tranzak.transaction_details').$record->requestId;
                 $headers = ['Access-Control-Allow-Origin'=> '*',  'Authorization' => "Bearer {{ cache($tranzak_credentials->cache_token_key) }}"];
                 $response = Http::withHeaders($headers)->get($url);
